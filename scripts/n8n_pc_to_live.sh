@@ -1,6 +1,43 @@
 #!/bin/bash
 # PC to Live: Push from local to production via GitHub
 
+# SAFETY CHECK: Require approval for dangerous operations
+if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
+    
+    # Check if testing mode is active
+    if [ -f "/home/alex/PC-Dashboard/.testing_mode" ]; then
+        echo "⚠️  TESTING MODE ACTIVE"
+        echo "This script will not actually deploy to production."
+        echo "Remove /home/alex/PC-Dashboard/.testing_mode to enable real deployment"
+        echo ""
+        echo "Running in TEST MODE (no actual changes will be made)..."
+        echo ""
+        # Continue but in test mode
+        TEST_MODE=true
+    fi
+    
+    # If Claude Code or automation detected, require explicit approval
+    if [ -n "$CLAUDE_CODE_SESSION" ] || [ -n "$CLAUDE_CODE" ] || [ ! -t 0 ]; then
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "🚨 APPROVAL REQUIRED: This will deploy to PRODUCTION"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "Claude Code is requesting to run: n8n_pc_to_live.sh"
+        echo "This will push your local N8N workflows to production!"
+        echo ""
+        echo "To approve, type: yes"
+        echo "To cancel, type: no (or press Ctrl+C)"
+        echo ""
+        read -p "Do you approve this deployment? " -r confirm
+        if [ "$confirm" != "yes" ]; then
+            echo "❌ Deployment cancelled by user"
+            exit 1
+        fi
+        echo "✅ Deployment approved by user"
+        echo ""
+    fi
+fi
+
 echo "🚀 Deploying N8N from PC → GitHub → Live..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "⚠️  CAUTION: This will update PRODUCTION!"

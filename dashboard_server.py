@@ -147,6 +147,29 @@ class DashboardHandler(BaseHTTPRequestHandler):
         if not referer and 'curl' in user_agent.lower():
             logging.warning(f"⚠️ Command line execution attempt detected for: {script_name}")
         
+        # SAFETY CHECK: Check for testing mode
+        if os.path.exists('/home/alex/PC-Dashboard/.testing_mode'):
+            logging.warning(f"⛔ BLOCKED: Testing mode active - {script_name}")
+            return {
+                'success': False,
+                'error': 'TESTING MODE ACTIVE - Script execution blocked for safety',
+                'message': 'Remove .testing_mode file to enable script execution'
+            }
+        
+        # SAFETY CHECK: Detect dangerous scripts and block if from automation
+        dangerous_patterns = ['push', 'pull', 'deploy', 'live', 'production', 'sync']
+        is_dangerous = any(pattern in script_name.lower() for pattern in dangerous_patterns)
+        
+        if is_dangerous:
+            # Check for signs of automation
+            if 'claude' in user_agent.lower() or not referer:
+                logging.warning(f"⛔ BLOCKED: Dangerous script from automation - {script_name}")
+                return {
+                    'success': False,
+                    'error': 'BLOCKED: This script requires manual execution through the dashboard',
+                    'message': 'For safety, this script cannot be run via automation'
+                }
+        
         logging.info(f"Running script: {script_name}")
         
         try:

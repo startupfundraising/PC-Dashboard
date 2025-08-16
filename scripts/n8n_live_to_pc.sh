@@ -1,6 +1,42 @@
 #!/bin/bash
 # Live to PC: Pull from production to local via GitHub
 
+# SAFETY CHECK: Require approval for dangerous operations
+if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
+    
+    # Check if testing mode is active
+    if [ -f "/home/alex/PC-Dashboard/.testing_mode" ]; then
+        echo "⚠️  TESTING MODE ACTIVE"
+        echo "This script will simulate syncing but not make actual changes."
+        echo "Remove /home/alex/PC-Dashboard/.testing_mode to enable real sync"
+        echo ""
+        echo "Running in TEST MODE..."
+        echo ""
+        TEST_MODE=true
+    fi
+    
+    # If Claude Code or automation detected, require explicit approval
+    if [ -n "$CLAUDE_CODE_SESSION" ] || [ -n "$CLAUDE_CODE" ] || [ ! -t 0 ]; then
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo "🔄 APPROVAL REQUIRED: Sync from PRODUCTION"
+        echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+        echo ""
+        echo "Claude Code is requesting to run: n8n_live_to_pc.sh"
+        echo "This will sync N8N workflows from production to your PC!"
+        echo ""
+        echo "To approve, type: yes"
+        echo "To cancel, type: no (or press Ctrl+C)"
+        echo ""
+        read -p "Do you approve this sync? " -r confirm
+        if [ "$confirm" != "yes" ]; then
+            echo "❌ Sync cancelled by user"
+            exit 1
+        fi
+        echo "✅ Sync approved by user"
+        echo ""
+    fi
+fi
+
 echo "🔄 Syncing N8N from Live → GitHub → PC..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
