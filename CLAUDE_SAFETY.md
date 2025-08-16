@@ -1,56 +1,121 @@
-# ⚠️ CRITICAL SAFETY INFORMATION FOR CLAUDE CODE ⚠️
+# ⚠️ SAFETY INFORMATION FOR CLAUDE CODE ⚠️
 
-## DANGEROUS SCRIPTS - NEVER EXECUTE THESE
+## NEW: Approval-Based Protection System
 
-The following scripts can modify PRODUCTION systems and must NEVER be executed during debugging:
+### How It Works
+Claude Code CAN now request to run dangerous scripts, but user approval is required:
 
-### FORBIDDEN COMMANDS:
-```
-❌ NEVER RUN: bash /home/alex/projects/active/N8N/scripts/pc_push_to_github.sh
-❌ NEVER RUN: bash /home/alex/projects/active/N8N/scripts/pc_pull_from_github.sh
-❌ NEVER RUN: bash /home/alex/projects/active/N8N/scripts/sync_live_to_git.sh
-❌ NEVER RUN: bash /home/alex/projects/active/N8N/scripts/hetzner_pull_from_github.sh
-❌ NEVER RUN: bash /home/alex/PC-Dashboard/scripts/n8n_live_to_pc.sh
-❌ NEVER RUN: bash /home/alex/PC-Dashboard/scripts/n8n_pc_to_live.sh
-❌ NEVER RUN: curl http://localhost:8888/run/*
-❌ NEVER RUN: Any script that contains "push", "pull", "sync", "deploy", "live", "production"
-```
+1. **Request Execution** - Claude Code can attempt to run any script
+2. **Approval Prompt** - User sees clear warning about what will happen
+3. **User Decision** - Type "yes" to approve or "no" to cancel
+4. **Safe Testing** - Testing mode allows simulation without real changes
 
-## SAFE DIAGNOSTIC ONLY
-
-When user reports dashboard issues, ONLY use:
+### Example Interaction
 ```bash
-/home/alex/PC-Dashboard/safe_diagnose.sh
+# Claude Code runs:
+./scripts/n8n_pc_to_live.sh
+
+# User sees:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚨 APPROVAL REQUIRED: This will deploy to PRODUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Claude Code is requesting to run: n8n_pc_to_live.sh
+This will push your local N8N workflows to production!
+
+To approve, type: yes
+To cancel, type: no (or press Ctrl+C)
+
+Do you approve this deployment? 
+
+# User types: yes (or no)
 ```
 
-This script ONLY checks file existence, never executes anything dangerous.
+## Protected Scripts (Require Approval)
 
-## RULES FOR CLAUDE CODE:
+### N8N Deployment Scripts
+- `n8n_pc_to_live.sh` - Deploys local to PRODUCTION ⚠️
+- `n8n_live_to_pc.sh` - Syncs PRODUCTION to local ⚠️
+- `pc_push_to_github.sh` - Pushes changes to GitHub
+- `sync_live_to_git.sh` - Syncs production to Git
+- Any script with keywords: "push", "pull", "sync", "deploy", "live", "production"
 
-1. **NEVER execute N8N sync scripts directly** - They can overwrite production
-2. **NEVER test dashboard buttons by calling the API** - User will test through browser
-3. **NEVER create test scripts that call the real scripts** - Could trigger production changes
-4. **ONLY use safe_diagnose.sh** for debugging dashboard issues
-5. **If unsure, ASK the user first** before running ANY command
+### Dashboard API Calls
+- `http://localhost:8888/run/*` - Protected by server-side checks
+- Dashboard detects automation and blocks dangerous operations in testing mode
 
-## CONTEXT FOR FUTURE SESSIONS:
+## Testing Mode
 
-This dashboard controls production deployments. Even testing can cause damage:
-- "PC to Live" deploys local code to PRODUCTION server
-- "Live to PC" overwrites LOCAL with production (data loss)
-- GitHub sync scripts can overwrite either direction
+### Enable Safe Testing
+```bash
+touch /home/alex/PC-Dashboard/.testing_mode
+```
+- Scripts show warnings but continue in SIMULATION mode
+- No real changes to production systems
+- Safe for Claude Code to test workflows
 
-The user previously had production overwritten during "testing" - this MUST NOT happen again.
+### Disable Testing Mode
+```bash
+rm /home/alex/PC-Dashboard/.testing_mode
+```
+- Scripts execute REAL operations (still require approval)
+- Production changes are possible
+- User must approve each dangerous operation
 
-## SAFE COMMANDS:
+## Safe Operations (No Approval Needed)
 
-✅ cat /home/alex/PC-Dashboard/dashboard_server.py
-✅ ls -la /home/alex/PC-Dashboard/
-✅ systemctl status pc-dashboard
-✅ journalctl -u pc-dashboard
-✅ /home/alex/PC-Dashboard/safe_diagnose.sh
+These are always safe to run:
+- ✅ `cat` any file
+- ✅ `ls -la` any directory
+- ✅ `git status`, `docker ps`
+- ✅ `systemctl status pc-dashboard`
+- ✅ `journalctl -u pc-dashboard`
+- ✅ `/home/alex/PC-Dashboard/safe_diagnose.sh`
+- ✅ Reading logs
+- ✅ Checking file existence
 
-## REMINDER:
+## Best Practices for Claude Code
 
-The dashboard is for the USER to click buttons in their browser.
-Claude Code should ONLY help with code/configuration, never execute the actual operations.
+1. **Explain Intent First**
+   - Tell user WHY you want to run a script
+   - Example: "I need to test the sync script to verify it works"
+
+2. **Check Testing Mode**
+   - Suggest enabling testing mode for safety
+   - Example: "Let me enable testing mode first for safety"
+
+3. **Respect User Decisions**
+   - If user types "no", stop and ask for guidance
+   - Never try to bypass approval system
+
+4. **Read Output Carefully**
+   - Pay attention to warnings and errors
+   - Report issues to user clearly
+
+## Emergency Override (User Only)
+
+For emergencies, users can bypass all checks:
+```bash
+SKIP_SAFETY_CHECK=true ./script_name.sh
+```
+**Note:** This is for manual use only, not for Claude Code
+
+## Implementation Details
+
+The protection system checks:
+1. **Environment Variables** - Detects `CLAUDE_CODE_SESSION`
+2. **Testing Mode File** - Checks for `.testing_mode`
+3. **User Approval** - Requires "yes" input for dangerous operations
+4. **TTY Detection** - Identifies automated vs manual execution
+
+## Historical Context
+
+Previously, Claude Code was completely blocked from running dangerous scripts due to an incident where production was accidentally overwritten. The new approval system maintains safety while allowing Claude Code to be more helpful with user consent.
+
+## Summary
+
+- **Old System:** Claude Code BLOCKED from dangerous scripts
+- **New System:** Claude Code can REQUEST, user must APPROVE
+- **Testing Mode:** Safe simulation without real changes
+- **User Control:** Always maintained through approval prompts
+
+The dashboard is now safer AND more flexible!

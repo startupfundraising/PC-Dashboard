@@ -133,8 +133,46 @@ PC-Dashboard/
 - **Docker Cleanup** - Remove unused containers/images
 - **Disk Usage** - Check storage space
 
-## Security Notes
+## Security & Protection System
 
+### Approval-Based Protection
+This dashboard includes a sophisticated protection system that prevents accidental execution of dangerous scripts:
+
+- **User Approval Required** - Dangerous scripts require you to type "yes" to proceed
+- **Testing Mode** - Enable safe testing without affecting production systems
+- **Claude Code Compatible** - Automation tools can request execution, but you maintain control
+- **Clear Warnings** - See exactly what will happen before approving
+
+### Protection Features
+
+1. **Smart Detection** - Automatically identifies dangerous operations (deploy, push, sync, etc.)
+2. **Testing Mode** - Create `.testing_mode` file to simulate without real changes
+3. **Approval Prompts** - Type "yes" to approve or "no" to cancel dangerous operations
+4. **Comprehensive Logging** - All script executions are logged for audit purposes
+
+### How to Use
+
+**With Claude Code or Automation:**
+```bash
+# Claude Code will request approval
+./scripts/n8n_pc_to_live.sh
+# You'll see: "APPROVAL REQUIRED: This will deploy to PRODUCTION"
+# Type: yes (to approve) or no (to cancel)
+```
+
+**Enable Testing Mode:**
+```bash
+touch /home/alex/PC-Dashboard/.testing_mode
+# Scripts will now run in simulation mode
+```
+
+**Disable Testing Mode:**
+```bash
+rm /home/alex/PC-Dashboard/.testing_mode
+# Scripts will execute real operations (with approval)
+```
+
+### Network Security
 - Only run on trusted networks
 - Default configuration listens on localhost only
 - To access from other devices, change `HOST = '0.0.0.0'` in `dashboard_server.py`
