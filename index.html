@@ -99,33 +99,44 @@
             display: block;
         }
         
+        /* Card Blocks */
+        .card-section {
+            background: #0f3460;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        
         /* Script Buttons Grid */
         .scripts-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 1rem;
-            margin-bottom: 2rem;
         }
         
         .script-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #16213e;
             color: white;
-            border: none;
+            border: 2px solid transparent;
             padding: 1.2rem;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 0.5rem;
+            position: relative;
         }
         
         .script-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            border-color: #4fbdba;
+            background: #1f2f4f;
+            box-shadow: 0 5px 15px rgba(79, 189, 186, 0.3);
         }
         
         .script-btn:active {
@@ -133,15 +144,46 @@
         }
         
         .script-btn.success {
-            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            border-color: #38ef7d;
         }
         
         .script-btn.danger {
-            background: linear-gradient(135deg, #ee0979 0%, #ff6a00 100%);
+            border-color: #ff6a00;
         }
         
         .script-btn.info {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border-color: #00f2fe;
+        }
+        
+        /* Tooltip */
+        .script-btn[data-tooltip]:hover::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #000;
+            color: #fff;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-bottom: 0.5rem;
+            max-width: 250px;
+            white-space: normal;
+            text-align: center;
+        }
+        
+        .script-btn[data-tooltip]:hover::before {
+            content: '';
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 6px solid transparent;
+            border-top-color: #000;
+            margin-bottom: -0.5rem;
         }
         
         .script-btn .icon {
@@ -259,7 +301,6 @@
         <button class="tab active" onclick="switchTab('dashboard')">🏠 Dashboard</button>
         <button class="tab" onclick="switchTab('n8n')">🔧 N8N</button>
         <button class="tab" onclick="switchTab('github')">📦 GitHub</button>
-        <button class="tab" onclick="switchTab('system')">💻 System</button>
         <button class="tab" onclick="switchTab('logs')">📋 Logs</button>
     </div>
     
@@ -267,117 +308,140 @@
     <div class="content">
         <!-- Dashboard Tab -->
         <div id="dashboard" class="tab-content active">
-            <h2 class="section-header">Quick Actions</h2>
-            <div class="scripts-grid">
-                <button class="script-btn success" onclick="runScript('n8n-status')">
-                    <span class="icon">🔍</span>
-                    <span>N8N Status</span>
-                </button>
-                <button class="script-btn" onclick="runScript('git-pull-all')">
-                    <span class="icon">📥</span>
-                    <span>Pull All Repos</span>
-                </button>
-                <button class="script-btn info" onclick="runScript('system-health')">
-                    <span class="icon">💓</span>
-                    <span>System Health</span>
-                </button>
-                <button class="script-btn" onclick="runScript('backup-all')">
-                    <span class="icon">💾</span>
-                    <span>Backup All</span>
-                </button>
+            <div class="card-section">
+                <h2 class="section-header">🔧 N8N</h2>
+                <div class="scripts-grid">
+                    <button class="script-btn" onclick="runScript('n8n-pc-to-github')"
+                            data-tooltip="Push local N8N workflows to GitHub">
+                        <span class="icon">📤</span>
+                        <span>PC to GitHub</span>
+                    </button>
+                    <button class="script-btn" onclick="runScript('n8n-github-to-pc')"
+                            data-tooltip="Pull N8N workflows from GitHub to local">
+                        <span class="icon">📥</span>
+                        <span>GitHub to PC</span>
+                    </button>
+                </div>
             </div>
             
-            <h2 class="section-header">Daily Tasks</h2>
-            <div class="scripts-grid">
-                <button class="script-btn" onclick="runScript('morning-sync')">
-                    <span class="icon">☀️</span>
-                    <span>Morning Sync</span>
-                </button>
-                <button class="script-btn" onclick="runScript('evening-backup')">
-                    <span class="icon">🌙</span>
-                    <span>Evening Backup</span>
-                </button>
+            <div class="card-section">
+                <h2 class="section-header">⚙️ Admin</h2>
+                <div class="scripts-grid">
+                    <button class="script-btn info" onclick="runScript('edit-dashboard')"
+                            data-tooltip="Open Claude Code with dashboard context for easy editing">
+                        <span class="icon">✏️</span>
+                        <span>Edit Dashboard</span>
+                    </button>
+                </div>
             </div>
         </div>
         
         <!-- N8N Tab -->
         <div id="n8n" class="tab-content">
-            <h2 class="section-header">N8N Controls</h2>
-            <div class="scripts-grid">
-                <button class="script-btn success" onclick="runScript('n8n-start')">
-                    <span class="icon">▶️</span>
-                    <span>Start N8N</span>
-                </button>
-                <button class="script-btn danger" onclick="runScript('n8n-stop')">
-                    <span class="icon">⏹️</span>
-                    <span>Stop N8N</span>
-                </button>
-                <button class="script-btn info" onclick="runScript('n8n-restart')">
-                    <span class="icon">🔄</span>
-                    <span>Restart N8N</span>
-                </button>
-                <button class="script-btn" onclick="runScript('n8n-logs')">
-                    <span class="icon">📜</span>
-                    <span>View Logs</span>
-                </button>
+            <div class="card-section">
+                <h2 class="section-header">📅 Daily</h2>
+                <div class="scripts-grid">
+                    <button class="script-btn" onclick="runScript('n8n-pc-to-github')"
+                            data-tooltip="Push local N8N workflows to GitHub">
+                        <span class="icon">📤</span>
+                        <span>PC to GitHub</span>
+                    </button>
+                    <button class="script-btn" onclick="runScript('n8n-github-to-pc')"
+                            data-tooltip="Pull N8N workflows from GitHub to local">
+                        <span class="icon">📥</span>
+                        <span>GitHub to PC</span>
+                    </button>
+                </div>
             </div>
             
-            <h2 class="section-header">N8N Sync</h2>
-            <div class="scripts-grid">
-                <button class="script-btn" onclick="runScript('n8n-sync-from-prod')">
-                    <span class="icon">⬇️</span>
-                    <span>Sync from Prod</span>
-                </button>
-                <button class="script-btn" onclick="runScript('n8n-backup')">
-                    <span class="icon">💾</span>
-                    <span>Backup to Dropbox</span>
-                </button>
-                <button class="script-btn" onclick="runScript('n8n-refresh-local')">
-                    <span class="icon">🔄</span>
-                    <span>Refresh Local</span>
-                </button>
+            <div class="card-section">
+                <h2 class="section-header">🐙 GitHub Sync</h2>
+                <div class="scripts-grid">
+                    <button class="script-btn" onclick="runScript('n8n-live-to-github')"
+                            data-tooltip="Push production N8N workflows to GitHub">
+                        <span class="icon">🌐</span>
+                        <span>Live to GitHub</span>
+                    </button>
+                    <button class="script-btn" onclick="runScript('n8n-github-to-live')"
+                            data-tooltip="Deploy workflows from GitHub to production">
+                        <span class="icon">🚀</span>
+                        <span>GitHub to Live</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="card-section">
+                <h2 class="section-header">⚠️ Caution</h2>
+                <div class="scripts-grid">
+                    <button class="script-btn danger" onclick="runScript('n8n-live-to-pc')"
+                            data-tooltip="Pull from production to local via GitHub (overwrites local)">
+                        <span class="icon">⬇️</span>
+                        <span>Live to PC</span>
+                    </button>
+                    <button class="script-btn danger" onclick="runScript('n8n-pc-to-live')"
+                            data-tooltip="Deploy local to production via GitHub (updates production!)">
+                        <span class="icon">⬆️</span>
+                        <span>PC to Live</span>
+                    </button>
+                </div>
             </div>
         </div>
         
         <!-- GitHub Tab -->
         <div id="github" class="tab-content">
-            <h2 class="section-header">Git Operations</h2>
-            <div class="scripts-grid">
-                <button class="script-btn info" onclick="runScript('git-status-all')">
-                    <span class="icon">📊</span>
-                    <span>Status All</span>
-                </button>
-                <button class="script-btn success" onclick="runScript('git-pull-all')">
-                    <span class="icon">📥</span>
-                    <span>Pull All</span>
-                </button>
-                <button class="script-btn" onclick="runScript('git-push-all')">
-                    <span class="icon">📤</span>
-                    <span>Push All</span>
-                </button>
-                <button class="script-btn" onclick="runScript('git-commit-all')">
-                    <span class="icon">💾</span>
-                    <span>Quick Commit All</span>
-                </button>
-            </div>
-        </div>
-        
-        <!-- System Tab -->
-        <div id="system" class="tab-content">
-            <h2 class="section-header">System Management</h2>
-            <div class="scripts-grid">
-                <button class="script-btn info" onclick="runScript('disk-usage')">
-                    <span class="icon">💽</span>
-                    <span>Disk Usage</span>
-                </button>
-                <button class="script-btn" onclick="runScript('docker-cleanup')">
-                    <span class="icon">🗑️</span>
-                    <span>Docker Cleanup</span>
-                </button>
-                <button class="script-btn" onclick="runScript('system-update')">
-                    <span class="icon">📦</span>
-                    <span>System Update</span>
-                </button>
+            <h2 class="section-header" style="text-align: center; margin-bottom: 2rem;">🔧 N8N Workflows</h2>
+            
+            <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                <!-- Daily Column -->
+                <div style="flex: 1; min-width: 200px;">
+                    <h3 style="color: #4fbdba; text-align: center; margin-bottom: 1rem;">📅 Daily</h3>
+                    <div class="scripts-grid" style="grid-template-columns: 1fr;">
+                        <button class="script-btn" onclick="runScript('n8n-pc-to-github')"
+                                data-tooltip="Push local N8N workflows to GitHub">
+                            <span class="icon">📤</span>
+                            <span>PC to GitHub</span>
+                        </button>
+                        <button class="script-btn" onclick="runScript('n8n-github-to-pc')"
+                                data-tooltip="Pull N8N workflows from GitHub to local">
+                            <span class="icon">📥</span>
+                            <span>GitHub to PC</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- GitHub Column -->
+                <div style="flex: 1; min-width: 200px;">
+                    <h3 style="color: #4fbdba; text-align: center; margin-bottom: 1rem;">🐙 GitHub</h3>
+                    <div class="scripts-grid" style="grid-template-columns: 1fr;">
+                        <button class="script-btn" onclick="runScript('n8n-live-to-github')"
+                                data-tooltip="Push production N8N workflows to GitHub">
+                            <span class="icon">🌐</span>
+                            <span>Live to GitHub</span>
+                        </button>
+                        <button class="script-btn" onclick="runScript('n8n-github-to-live')"
+                                data-tooltip="Deploy workflows from GitHub to production">
+                            <span class="icon">🚀</span>
+                            <span>GitHub to Live</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Caution Column -->
+                <div style="flex: 1; min-width: 200px;">
+                    <h3 style="color: #ff6a00; text-align: center; margin-bottom: 1rem;">⚠️ Caution</h3>
+                    <div class="scripts-grid" style="grid-template-columns: 1fr;">
+                        <button class="script-btn danger" onclick="runScript('n8n-live-to-pc')"
+                                data-tooltip="Pull from production to local via GitHub (overwrites local)">
+                            <span class="icon">⬇️</span>
+                            <span>Live to PC</span>
+                        </button>
+                        <button class="script-btn danger" onclick="runScript('n8n-pc-to-live')"
+                                data-tooltip="Deploy local to production via GitHub (updates production!)">
+                            <span class="icon">⬆️</span>
+                            <span>PC to Live</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
         
@@ -431,23 +495,37 @@
             const terminal = document.getElementById('terminal');
             const timestamp = new Date().toLocaleTimeString();
             
+            // Clear and add new output
             terminal.textContent = `[${timestamp}] Running: ${scriptName}\n`;
             terminal.textContent += '─'.repeat(50) + '\n';
+            
+            // Scroll to top to see new output
+            terminal.scrollTop = 0;
             
             try {
                 const response = await fetch(`http://localhost:8888/run/${scriptName}`);
                 const result = await response.json();
                 
-                if (result.success) {
-                    terminal.textContent += result.output;
-                    showNotification('✅ ' + result.message, 'success');
+                if (result.success !== undefined) {
+                    // Limit output to last 100 lines
+                    const output = result.output || 'No output';
+                    const lines = output.split('\n');
+                    const limitedOutput = lines.slice(-100).join('\n');
+                    terminal.textContent += limitedOutput;
+                    
+                    if (result.success) {
+                        showNotification('✅ ' + (result.message || 'Command completed'), 'success');
+                    } else {
+                        showNotification('❌ ' + (result.message || result.error || 'Command failed'), 'error');
+                    }
                 } else {
-                    terminal.textContent += 'Error: ' + result.error;
-                    showNotification('❌ ' + result.error, 'error');
+                    terminal.textContent += 'Error: Invalid response from server\n';
+                    terminal.textContent += JSON.stringify(result, null, 2);
+                    showNotification('❌ Server error', 'error');
                 }
                 
-                // Auto-scroll terminal
-                terminal.scrollTop = terminal.scrollHeight;
+                // Keep scroll at top
+                terminal.scrollTop = 0;
                 
             } catch (error) {
                 terminal.textContent += `Connection error: ${error.message}\n`;
@@ -464,7 +542,7 @@
             
             setTimeout(() => {
                 notification.classList.remove('show');
-            }, 3000);
+            }, 7000); // Changed from 3000 to 7000 (7 seconds)
         }
         
         // Clear terminal
@@ -502,7 +580,7 @@
                     document.getElementById('terminal').textContent = '✅ Dashboard server connected. Ready for commands.\n';
                 }
             } catch (error) {
-                document.getElementById('terminal').textContent = '⚠️ Server not running. Start with: python3 dashboard_server.py\n';
+                document.getElementById('terminal').textContent = '⚠️ Server not running. Start with: sudo systemctl start pc-dashboard\n';
             }
         };
     </script>

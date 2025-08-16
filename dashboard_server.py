@@ -33,126 +33,40 @@ logging.basicConfig(
 
 # Script mappings - linking to existing project scripts
 SCRIPT_MAPPINGS = {
-    # N8N Scripts
-    'n8n-status': {
-        'cmd': 'cd /home/alex/projects/active/N8N && docker-compose -f docker-compose.local.yml ps',
-        'description': 'Check N8N container status'
+    # N8N Scripts - Daily Operations
+    'n8n-pc-to-github': {
+        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/pc_push_to_github.sh',
+        'description': 'Push local N8N workflows to GitHub'
     },
-    'n8n-start': {
-        'cmd': 'cd /home/alex/projects/active/N8N && docker-compose -f docker-compose.local.yml up -d',
-        'description': 'Start N8N containers'
-    },
-    'n8n-stop': {
-        'cmd': 'cd /home/alex/projects/active/N8N && docker-compose -f docker-compose.local.yml down',
-        'description': 'Stop N8N containers'
-    },
-    'n8n-restart': {
-        'cmd': 'cd /home/alex/projects/active/N8N && docker-compose -f docker-compose.local.yml restart',
-        'description': 'Restart N8N containers'
-    },
-    'n8n-logs': {
-        'cmd': 'cd /home/alex/projects/active/N8N && docker-compose -f docker-compose.local.yml logs --tail=100',
-        'description': 'View N8N logs'
-    },
-    'n8n-sync-from-prod': {
-        'cmd': 'cd /home/alex/projects/active/N8N && ./scripts/refresh_local_from_prod.sh',
-        'description': 'Sync workflows from production'
-    },
-    'n8n-backup': {
-        'cmd': 'cd /home/alex/projects/active/N8N && ./backup_to_dropbox.sh',
-        'description': 'Backup N8N to Dropbox'
-    },
-    'n8n-refresh-local': {
-        'cmd': 'cd /home/alex/projects/active/N8N && ./scripts/refresh_local_from_prod.sh',
-        'description': 'Refresh local N8N from production'
+    'n8n-github-to-pc': {
+        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/pc_pull_from_github.sh',
+        'description': 'Pull N8N workflows from GitHub to local'
     },
     
-    # Git Operations
-    'git-status-all': {
-        'cmd': '''for dir in /home/alex/projects/active/*/; do 
-            if [ -d "$dir/.git" ]; then 
-                echo "=== $(basename "$dir") ===" && 
-                cd "$dir" && 
-                git status -s && 
-                echo ""; 
-            fi; 
-        done''',
-        'description': 'Check git status of all projects'
+    # N8N Scripts - GitHub Sync
+    'n8n-live-to-github': {
+        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/sync_live_to_git.sh',
+        'description': 'Push production N8N workflows to GitHub'
     },
-    'git-pull-all': {
-        'cmd': '''for dir in /home/alex/projects/active/*/; do 
-            if [ -d "$dir/.git" ]; then 
-                echo "=== Pulling $(basename "$dir") ===" && 
-                cd "$dir" && 
-                git pull && 
-                echo ""; 
-            fi; 
-        done''',
-        'description': 'Pull all git repositories'
-    },
-    'git-push-all': {
-        'cmd': '''for dir in /home/alex/projects/active/*/; do 
-            if [ -d "$dir/.git" ]; then 
-                echo "=== $(basename "$dir") ===" && 
-                cd "$dir" && 
-                if [ -n "$(git status --porcelain)" ]; then 
-                    git add . && 
-                    git commit -m "Auto-commit from dashboard" && 
-                    git push && 
-                    echo "Pushed changes"; 
-                else 
-                    echo "No changes to push"; 
-                fi && 
-                echo ""; 
-            fi; 
-        done''',
-        'description': 'Push all pending changes'
-    },
-    'git-commit-all': {
-        'cmd': '''for dir in /home/alex/projects/active/*/; do 
-            if [ -d "$dir/.git" ]; then 
-                cd "$dir" && 
-                if [ -n "$(git status --porcelain)" ]; then 
-                    echo "=== Committing $(basename "$dir") ===" && 
-                    git add . && 
-                    git commit -m "Quick commit from dashboard - $(date +%Y-%m-%d_%H:%M)" && 
-                    echo "Committed"; 
-                fi; 
-            fi; 
-        done''',
-        'description': 'Quick commit all changes'
+    'n8n-github-to-live': {
+        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/hetzner_pull_from_github.sh',
+        'description': 'Deploy workflows from GitHub to production'
     },
     
-    # System Management
-    'system-health': {
-        'cmd': 'echo "=== CPU ===" && top -bn1 | head -5 && echo -e "\\n=== Memory ===" && free -h && echo -e "\\n=== Disk ===" && df -h /',
-        'description': 'Check system health'
+    # N8N Scripts - Caution (Full sync operations)
+    'n8n-live-to-pc': {
+        'cmd': 'bash /home/alex/PC-Dashboard/scripts/n8n_live_to_pc.sh',
+        'description': 'Pull from production to local via GitHub'
     },
-    'disk-usage': {
-        'cmd': 'df -h && echo -e "\\n=== Large Directories ===" && du -h --max-depth=1 /home/alex/projects 2>/dev/null | sort -rh | head -10',
-        'description': 'Check disk usage'
-    },
-    'docker-cleanup': {
-        'cmd': 'docker system prune -af --volumes && echo "Docker cleanup complete"',
-        'description': 'Clean up Docker resources'
-    },
-    'system-update': {
-        'cmd': 'sudo apt update && sudo apt list --upgradable',
-        'description': 'Check for system updates'
+    'n8n-pc-to-live': {
+        'cmd': 'bash /home/alex/PC-Dashboard/scripts/n8n_pc_to_live.sh',
+        'description': 'Deploy local to production via GitHub'
     },
     
-    # Quick Actions
-    'backup-all': {
-        'cmd': 'cd /home/alex/PC-Dashboard/scripts && ./backup_all.sh',
-        'description': 'Backup all projects'
-    },
-    'morning-sync': {
-        'cmd': 'cd /home/alex/PC-Dashboard/scripts && ./morning_sync.sh',
-        'description': 'Morning sync routine'
-    },
-    'evening-backup': {
-        'cmd': 'cd /home/alex/PC-Dashboard/scripts && ./evening_backup.sh',
-        'description': 'Evening backup routine'
+    # Admin Scripts
+    'edit-dashboard': {
+        'cmd': 'bash /home/alex/PC-Dashboard/scripts/edit_dashboard.sh',
+        'description': 'Open Claude Code with dashboard context'
     }
 }
 
@@ -194,6 +108,14 @@ class DashboardHandler(BaseHTTPRequestHandler):
                     'success': False,
                     'error': f'Unknown script: {script_name}'
                 }).encode())
+        elif path == '/' or path == '/index.html':
+            self.send_header('Content-Type', 'text/html')
+            self.end_headers()
+            try:
+                with open('/home/alex/PC-Dashboard/index.html', 'r') as f:
+                    self.wfile.write(f.read().encode())
+            except:
+                self.wfile.write(b'<h1>Error loading dashboard</h1>')
         else:
             self.send_header('Content-Type', 'text/plain')
             self.end_headers()
@@ -211,6 +133,19 @@ class DashboardHandler(BaseHTTPRequestHandler):
         """Execute a script and return the result"""
         script_info = SCRIPT_MAPPINGS[script_name]
         cmd = script_info['cmd']
+        
+        # Safety check - log who's calling this
+        user_agent = self.headers.get('User-Agent', '')
+        referer = self.headers.get('Referer', '')
+        
+        # Log execution attempt with context
+        logging.info(f"Script execution request: {script_name}")
+        logging.info(f"User-Agent: {user_agent}")
+        logging.info(f"Referer: {referer}")
+        
+        # Check if this looks like it's coming from a browser vs command line
+        if not referer and 'curl' in user_agent.lower():
+            logging.warning(f"⚠️ Command line execution attempt detected for: {script_name}")
         
         logging.info(f"Running script: {script_name}")
         
@@ -236,18 +171,22 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 timeout=60
             )
             
-            output = result.stdout
-            if result.stderr and result.returncode != 0:
-                output += f"\nError: {result.stderr}"
+            output = result.stdout if result.stdout else ""
+            if result.stderr:
+                output += f"\nSTDERR: {result.stderr}"
             
             success = result.returncode == 0
             
             logging.info(f"Script {script_name} completed with code {result.returncode}")
             
+            # Always return some output, even if empty
+            if not output:
+                output = f"Command executed: {cmd}\nReturn code: {result.returncode}"
+            
             return {
                 'success': success,
                 'output': output,
-                'message': f"{script_name} completed successfully" if success else f"{script_name} failed"
+                'message': f"{script_name} completed successfully" if success else f"{script_name} failed with code {result.returncode}"
             }
             
         except subprocess.TimeoutExpired:
