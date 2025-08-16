@@ -124,6 +124,75 @@ cd ~/PC-Dashboard/scripts
 - ✅ Claude Code compatibility with approval prompts
 - ✅ Comprehensive logging
 
+## Working with Claude Code on Mac
+
+### Understanding the Approval System
+
+When Claude Code tries to run dangerous scripts, you'll see:
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚨 APPROVAL REQUIRED: This will deploy to PRODUCTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Claude Code is requesting to run: script_name
+Do you approve? [yes/no]
+```
+
+### Option 1: Keep Approval System (Recommended)
+This is the safest approach - Claude Code can help but you maintain control:
+- When prompted, type `yes` to approve or `no` to cancel
+- Protects against accidental production changes
+- Works well with Claude Code's assistance
+
+### Option 2: Disable Claude Code Detection (Less Safe)
+If you trust Claude Code completely on your Mac, you can disable the detection:
+
+In each protected script (`n8n_pc_to_live.sh`, `n8n_live_to_pc.sh`), comment out the Claude Code check:
+
+```bash
+# SAFETY CHECK: Require approval for dangerous operations
+if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
+    
+    # Check if testing mode is active
+    if [ -f "/Users/username/PC-Dashboard/.testing_mode" ]; then
+        echo "⚠️  TESTING MODE ACTIVE"
+        TEST_MODE=true
+    fi
+    
+    # COMMENT OUT THIS SECTION TO DISABLE CLAUDE CODE DETECTION:
+    # if [ -n "$CLAUDE_CODE_SESSION" ] || [ -n "$CLAUDE_CODE" ] || [ ! -t 0 ]; then
+    #     echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+    #     echo "🚨 APPROVAL REQUIRED"
+    #     ...
+    # fi
+fi
+```
+
+### Option 3: Use Testing Mode (Safest for Development)
+Enable testing mode to allow Claude Code to work without real changes:
+
+```bash
+# Enable testing mode
+touch ~/PC-Dashboard/.testing_mode
+
+# Now Claude Code can run scripts safely
+# They'll show warnings but won't make real changes
+```
+
+### Option 4: Environment Variable Override
+Set an environment variable to tell scripts you're on a trusted Mac:
+
+```bash
+# Add to ~/.zshrc or ~/.bash_profile
+export TRUSTED_ENVIRONMENT=mac
+
+# Then modify scripts to check:
+if [ "$TRUSTED_ENVIRONMENT" = "mac" ]; then
+    echo "Running on trusted Mac - skipping approval"
+else
+    # Normal approval flow
+fi
+```
+
 ## Differences from PC Version
 
 - Paths: `/home/alex/` → `/Users/username/`
