@@ -1,14 +1,14 @@
 #!/bin/bash
-# PC to Live: Push from local to production via GitHub
+# Mac to Live: Push from Mac to production via GitHub
 
 # SAFETY CHECK: Require approval for dangerous operations
 if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
     
     # Check if testing mode is active
-    if [ -f "/home/alex/PC-Dashboard/.testing_mode" ]; then
+    if [ -f "/Users/alexander/Mac-Dashboard/.testing_mode" ]; then
         echo "⚠️  TESTING MODE ACTIVE"
         echo "This script will not actually deploy to production."
-        echo "Remove /home/alex/PC-Dashboard/.testing_mode to enable real deployment"
+        echo "Remove /Users/alexander/Mac-Dashboard/.testing_mode to enable real deployment"
         echo ""
         echo "Running in TEST MODE (no actual changes will be made)..."
         echo ""
@@ -22,8 +22,8 @@ if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
         echo "🚨 APPROVAL REQUIRED: This will deploy to PRODUCTION"
         echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
         echo ""
-        echo "Claude Code is requesting to run: n8n_pc_to_live.sh"
-        echo "This will push your local N8N workflows to production!"
+        echo "Claude Code is requesting to run: n8n_mac_to_live.sh"
+        echo "This will push your Mac N8N workflows to production!"
         echo ""
         echo "To approve, type: yes"
         echo "To cancel, type: no (or press Ctrl+C)"
@@ -38,7 +38,7 @@ if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
     fi
 fi
 
-echo "🚀 Deploying N8N from PC → GitHub → Live..."
+echo "🚀 Deploying N8N from Mac → GitHub → Live..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "⚠️  CAUTION: This will update PRODUCTION!"
 echo ""
@@ -50,14 +50,14 @@ if [ "$confirm" != "yes" ]; then
     exit 0
 fi
 
-# Step 1: Push PC to GitHub
+# Step 1: Push Mac to GitHub
 echo ""
-echo "📤 Step 1: Pushing PC to GitHub..."
-cd /home/alex/projects/active/N8N
-./scripts/pc_push_to_github.sh
+echo "📤 Step 1: Pushing Mac to GitHub..."
+cd /Users/alexander/projects/N8N
+./scripts/mac_push_to_github.sh
 
 if [ $? -ne 0 ]; then
-    echo "❌ Failed to push PC to GitHub"
+    echo "❌ Failed to push Mac to GitHub"
     exit 1
 fi
 
@@ -72,5 +72,5 @@ if [ $? -ne 0 ]; then
 fi
 
 echo ""
-echo "✅ Successfully deployed: PC → GitHub → Live"
+echo "✅ Successfully deployed: Mac → GitHub → Live"
 echo "Production N8N has been updated with your local changes!"

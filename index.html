@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PC Dashboard</title>
+    <title>Mac Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -289,7 +289,7 @@
 <body>
     <!-- Header -->
     <div class="header">
-        <h1>🖥️ PC Dashboard</h1>
+        <h1>🖥️ Mac Dashboard</h1>
         <div class="status-indicator">
             <div class="status-dot"></div>
             <span>System Active</span>
@@ -311,15 +311,15 @@
             <div class="card-section">
                 <h2 class="section-header">🔧 N8N</h2>
                 <div class="scripts-grid">
-                    <button class="script-btn" onclick="runScript('n8n-pc-to-github')"
-                            data-tooltip="Push local N8N workflows to GitHub">
+                    <button class="script-btn" onclick="runScript('n8n-mac-to-github')"
+                            data-tooltip="Push Mac N8N workflows to GitHub">
                         <span class="icon">📤</span>
-                        <span>PC to GitHub</span>
+                        <span>Mac to GitHub</span>
                     </button>
-                    <button class="script-btn" onclick="runScript('n8n-github-to-pc')"
-                            data-tooltip="Pull N8N workflows from GitHub to local">
+                    <button class="script-btn" onclick="runScript('n8n-github-to-mac')"
+                            data-tooltip="Pull N8N workflows from GitHub to Mac">
                         <span class="icon">📥</span>
-                        <span>GitHub to PC</span>
+                        <span>GitHub to Mac</span>
                     </button>
                 </div>
             </div>
@@ -341,15 +341,15 @@
             <div class="card-section">
                 <h2 class="section-header">📅 Daily</h2>
                 <div class="scripts-grid">
-                    <button class="script-btn" onclick="runScript('n8n-pc-to-github')"
-                            data-tooltip="Push local N8N workflows to GitHub">
+                    <button class="script-btn" onclick="runScript('n8n-mac-to-github')"
+                            data-tooltip="Push Mac N8N workflows to GitHub">
                         <span class="icon">📤</span>
-                        <span>PC to GitHub</span>
+                        <span>Mac to GitHub</span>
                     </button>
-                    <button class="script-btn" onclick="runScript('n8n-github-to-pc')"
-                            data-tooltip="Pull N8N workflows from GitHub to local">
+                    <button class="script-btn" onclick="runScript('n8n-github-to-mac')"
+                            data-tooltip="Pull N8N workflows from GitHub to Mac">
                         <span class="icon">📥</span>
-                        <span>GitHub to PC</span>
+                        <span>GitHub to Mac</span>
                     </button>
                 </div>
             </div>
@@ -373,15 +373,15 @@
             <div class="card-section">
                 <h2 class="section-header">⚠️ Caution</h2>
                 <div class="scripts-grid">
-                    <button class="script-btn danger" onclick="runScript('n8n-live-to-pc')"
-                            data-tooltip="Pull from production to local via GitHub (overwrites local)">
+                    <button class="script-btn danger" onclick="runScript('n8n-live-to-mac')"
+                            data-tooltip="Pull from production to Mac via GitHub (overwrites Mac)">
                         <span class="icon">⬇️</span>
-                        <span>Live to PC</span>
+                        <span>Live to Mac</span>
                     </button>
-                    <button class="script-btn danger" onclick="runScript('n8n-pc-to-live')"
-                            data-tooltip="Deploy local to production via GitHub (updates production!)">
+                    <button class="script-btn danger" onclick="runScript('n8n-mac-to-live')"
+                            data-tooltip="Deploy Mac to production via GitHub (updates production!)">
                         <span class="icon">⬆️</span>
-                        <span>PC to Live</span>
+                        <span>Mac to Live</span>
                     </button>
                 </div>
             </div>
@@ -396,15 +396,15 @@
                 <div style="flex: 1; min-width: 200px;">
                     <h3 style="color: #4fbdba; text-align: center; margin-bottom: 1rem;">📅 Daily</h3>
                     <div class="scripts-grid" style="grid-template-columns: 1fr;">
-                        <button class="script-btn" onclick="runScript('n8n-pc-to-github')"
-                                data-tooltip="Push local N8N workflows to GitHub">
+                        <button class="script-btn" onclick="runScript('n8n-mac-to-github')"
+                                data-tooltip="Push Mac N8N workflows to GitHub">
                             <span class="icon">📤</span>
-                            <span>PC to GitHub</span>
+                            <span>Mac to GitHub</span>
                         </button>
-                        <button class="script-btn" onclick="runScript('n8n-github-to-pc')"
-                                data-tooltip="Pull N8N workflows from GitHub to local">
+                        <button class="script-btn" onclick="runScript('n8n-github-to-mac')"
+                                data-tooltip="Pull N8N workflows from GitHub to Mac">
                             <span class="icon">📥</span>
-                            <span>GitHub to PC</span>
+                            <span>GitHub to Mac</span>
                         </button>
                     </div>
                 </div>
@@ -430,15 +430,15 @@
                 <div style="flex: 1; min-width: 200px;">
                     <h3 style="color: #ff6a00; text-align: center; margin-bottom: 1rem;">⚠️ Caution</h3>
                     <div class="scripts-grid" style="grid-template-columns: 1fr;">
-                        <button class="script-btn danger" onclick="runScript('n8n-live-to-pc')"
-                                data-tooltip="Pull from production to local via GitHub (overwrites local)">
+                        <button class="script-btn danger" onclick="runScript('n8n-live-to-mac')"
+                                data-tooltip="Pull from production to Mac via GitHub (overwrites Mac)">
                             <span class="icon">⬇️</span>
-                            <span>Live to PC</span>
+                            <span>Live to Mac</span>
                         </button>
-                        <button class="script-btn danger" onclick="runScript('n8n-pc-to-live')"
-                                data-tooltip="Deploy local to production via GitHub (updates production!)">
+                        <button class="script-btn danger" onclick="runScript('n8n-mac-to-live')"
+                                data-tooltip="Deploy Mac to production via GitHub (updates production!)">
                             <span class="icon">⬆️</span>
-                            <span>PC to Live</span>
+                            <span>Mac to Live</span>
                         </button>
                     </div>
                 </div>
@@ -503,7 +503,7 @@
             terminal.scrollTop = 0;
             
             try {
-                const response = await fetch(`http://localhost:8888/run/${scriptName}`);
+                const response = await fetch(`http://localhost:8888/execute?script=${scriptName}`);
                 const result = await response.json();
                 
                 if (result.success !== undefined) {
