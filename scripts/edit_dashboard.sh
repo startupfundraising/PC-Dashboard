@@ -1,19 +1,19 @@
 #!/bin/bash
 
-echo "Opening Claude Code with PC Dashboard context..."
+echo "Opening Claude Code with Mac Dashboard context..."
 
 # Create a context file with all the important information
 cat > /tmp/dashboard_context.md << 'EOF'
 # ⚠️ CRITICAL SAFETY WARNING ⚠️
 
-READ /home/alex/PC-Dashboard/CLAUDE_SAFETY.md FIRST!
+READ /Users/alexander/Mac-Dashboard/CLAUDE_SAFETY.md FIRST!
 
 NEVER execute the actual N8N scripts during debugging.
-ONLY use /home/alex/PC-Dashboard/safe_diagnose.sh for diagnostics.
+ONLY use /Users/alexander/Mac-Dashboard/safe_diagnose.sh for diagnostics.
 
-# PC Dashboard Context
+# Mac Dashboard Context
 
-You are editing the PC Dashboard located at: /home/alex/PC-Dashboard/
+You are editing the Mac Dashboard located at: /Users/alexander/Mac-Dashboard/
 
 ## Key Files:
 - index.html - Dashboard UI (buttons, layout, styling)
@@ -22,13 +22,13 @@ You are editing the PC Dashboard located at: /home/alex/PC-Dashboard/
 ## Current Button Structure:
 
 ### Dashboard Tab
-- N8N: PC to Github, GitHub to PC
+- N8N: Mac to Github, GitHub to Mac
 - Admin: Edit Dashboard
 
 ### N8N Tab
-Daily: PC to Github, GitHub to PC
+Daily: Mac to Github, GitHub to Mac
 Github: Live to GitHub, GitHub to live
-Caution: Live to PC, PC to live
+Caution: Live to Mac, Mac to live
 
 ### GitHub Tab
 Same as N8N tab structure
@@ -52,12 +52,12 @@ Same as N8N tab structure
 ```
 
 ## N8N Script Paths:
-- Live to GitHub: /home/alex/projects/active/N8N/scripts/sync_live_to_git.sh
-- GitHub to Live: /home/alex/projects/active/N8N/scripts/hetzner_pull_from_github.sh
-- PC to GitHub: /home/alex/projects/active/N8N/scripts/pc_push_to_github.sh
-- GitHub to PC: /home/alex/projects/active/N8N/scripts/pc_pull_from_github.sh
-- Live to PC: Creates new script that runs sync_live_to_git.sh then pc_pull_from_github.sh
-- PC to Live: Creates new script that runs pc_push_to_github.sh then hetzner_pull_from_github.sh
+- Live to GitHub: /Users/alexander/projects/N8N/scripts/sync_live_to_git.sh
+- GitHub to Live: /Users/alexander/projects/N8N/scripts/hetzner_pull_from_github.sh
+- Mac to GitHub: /Users/alexander/projects/N8N/scripts/mac_push_to_github.sh
+- GitHub to Mac: /Users/alexander/projects/N8N/scripts/mac_pull_from_github.sh
+- Live to Mac: Creates new script that runs sync_live_to_git.sh then mac_pull_from_github.sh
+- Mac to Live: Creates new script that runs mac_push_to_github.sh then hetzner_pull_from_github.sh
 
 ## Design Guidelines:
 - Card sections with #0f3460 background
@@ -74,6 +74,6 @@ echo "Context file created. Opening Claude Code..."
 echo ""
 echo "PASTE THIS COMMAND IN A NEW TERMINAL:"
 echo ""
-echo "cat /tmp/dashboard_context.md && cd /home/alex/PC-Dashboard && echo 'Ready to edit dashboard. What changes would you like?'"
+echo "cat /tmp/dashboard_context.md && cd /Users/alexander/Mac-Dashboard && echo 'Ready to edit dashboard. What changes would you like?'"
 echo ""
 echo "Then tell Claude what you want to change!"

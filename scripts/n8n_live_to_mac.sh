@@ -24,15 +24,23 @@ if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
         echo "Claude Code is requesting to run: n8n_live_to_mac.sh"
         echo "This will sync N8N workflows from production to your Mac!"
         echo ""
-        echo "To approve, type: yes"
-        echo "To cancel, type: no (or press Ctrl+C)"
-        echo ""
-        read -p "Do you approve this sync? " -r confirm
-        if [ "$confirm" != "yes" ]; then
-            echo "❌ Sync cancelled by user"
+        
+        # Check if running interactively
+        if [ -t 0 ]; then
+            echo "To approve, type: yes"
+            echo "To cancel, type: no (or press Ctrl+C)"
+            echo ""
+            read -p "Do you approve this sync? " -r confirm
+            if [ "$confirm" != "yes" ]; then
+                echo "❌ Sync cancelled by user"
+                exit 1
+            fi
+            echo "✅ Sync approved by user"
+        else
+            echo "❌ Non-interactive mode - cannot get approval"
+            echo "This script requires manual approval to sync from production"
             exit 1
         fi
-        echo "✅ Sync approved by user"
         echo ""
     fi
 fi
