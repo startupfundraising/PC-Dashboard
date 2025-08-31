@@ -53,9 +53,9 @@ check_claude_code_session() {
 }
 
 check_testing_mode() {
-    if [ -f "/home/alex/PC-Dashboard/.testing_mode" ]; then
+    if [ -f "/home/alex/projects/active/PC-Dashboard/.testing_mode" ]; then
         echo -e "${YELLOW}⚠️  TESTING MODE ACTIVE${NC}"
-        echo "Remove /home/alex/PC-Dashboard/.testing_mode to enable script execution"
+        echo "Remove /home/alex/projects/active/PC-Dashboard/.testing_mode to enable script execution"
         return 1
     fi
     return 0
@@ -121,7 +121,7 @@ log_execution() {
     local script="$1"
     local status="$2"
     local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-    local log_file="/home/alex/PC-Dashboard/logs/script_executions.log"
+    local log_file="/home/alex/projects/active/PC-Dashboard/logs/script_executions.log"
     
     echo "$timestamp | $status | $script | User: $(whoami) | TTY: $(tty 2>/dev/null || echo 'none')" >> "$log_file"
     

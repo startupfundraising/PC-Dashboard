@@ -47,7 +47,7 @@ Do you approve this deployment?
 
 ### Enable Safe Testing
 ```bash
-touch /home/alex/PC-Dashboard/.testing_mode
+touch /home/alex/projects/active/PC-Dashboard/.testing_mode
 ```
 - Scripts show warnings but continue in SIMULATION mode
 - No real changes to production systems
@@ -55,7 +55,7 @@ touch /home/alex/PC-Dashboard/.testing_mode
 
 ### Disable Testing Mode
 ```bash
-rm /home/alex/PC-Dashboard/.testing_mode
+rm /home/alex/projects/active/PC-Dashboard/.testing_mode
 ```
 - Scripts execute REAL operations (still require approval)
 - Production changes are possible
@@ -69,7 +69,7 @@ These are always safe to run:
 - ✅ `git status`, `docker ps`
 - ✅ `systemctl status pc-dashboard`
 - ✅ `journalctl -u pc-dashboard`
-- ✅ `/home/alex/PC-Dashboard/safe_diagnose.sh`
+- ✅ `/home/alex/projects/active/PC-Dashboard/safe_diagnose.sh`
 - ✅ Reading logs
 - ✅ Checking file existence
 

@@ -16,7 +16,7 @@ import traceback
 # Configuration
 PORT = 8888
 HOST = 'localhost'
-LOG_FILE = '/home/alex/PC-Dashboard/logs/dashboard.log'
+LOG_FILE = '/home/alex/projects/active/PC-Dashboard/logs/dashboard.log'
 
 # Ensure log directory exists
 os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
@@ -55,17 +55,17 @@ SCRIPT_MAPPINGS = {
     
     # N8N Scripts - Caution (Full sync operations)
     'n8n-live-to-pc': {
-        'cmd': 'bash /home/alex/PC-Dashboard/scripts/n8n_live_to_pc.sh',
+        'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/n8n_live_to_pc.sh',
         'description': 'Pull from production to local via GitHub'
     },
     'n8n-pc-to-live': {
-        'cmd': 'bash /home/alex/PC-Dashboard/scripts/n8n_pc_to_live.sh',
+        'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/n8n_pc_to_live.sh',
         'description': 'Deploy local to production via GitHub'
     },
     
     # Admin Scripts
     'edit-dashboard': {
-        'cmd': 'bash /home/alex/PC-Dashboard/scripts/edit_dashboard.sh',
+        'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/edit_dashboard.sh',
         'description': 'Open Claude Code with dashboard context'
     }
 }
@@ -112,7 +112,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/html')
             self.end_headers()
             try:
-                with open('/home/alex/PC-Dashboard/index.html', 'r') as f:
+                with open('/home/alex/projects/active/PC-Dashboard/index.html', 'r') as f:
                     self.wfile.write(f.read().encode())
             except:
                 self.wfile.write(b'<h1>Error loading dashboard</h1>')
@@ -152,7 +152,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         is_dangerous = any(pattern in script_name.lower() for pattern in dangerous_patterns)
         
         # Check testing mode (only log for dangerous scripts)
-        if os.path.exists('/home/alex/PC-Dashboard/.testing_mode') and is_dangerous:
+        if os.path.exists('/home/alex/projects/active/PC-Dashboard/.testing_mode') and is_dangerous:
             logging.info(f"ℹ️ Testing mode active - dangerous script {script_name} will run in test mode")
         
         # Block automation attempts on dangerous scripts (unless from browser)
@@ -175,7 +175,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 parts = cmd.split('&&')
                 if len(parts) > 1:
                     script_path = parts[1].strip()
-                    full_path = f"/home/alex/PC-Dashboard/scripts/{script_path.split('/')[-1]}"
+                    full_path = f"/home/alex/projects/active/PC-Dashboard/scripts/{script_path.split('/')[-1]}"
                     
                     # Create script if it doesn't exist
                     if not os.path.exists(full_path):
@@ -272,7 +272,7 @@ def main():
     """Start the dashboard server"""
     try:
         # Create scripts directory if it doesn't exist
-        os.makedirs('/home/alex/PC-Dashboard/scripts', exist_ok=True)
+        os.makedirs('/home/alex/projects/active/PC-Dashboard/scripts', exist_ok=True)
         
         server = HTTPServer((HOST, PORT), DashboardHandler)
         logging.info(f"Dashboard server starting on {HOST}:{PORT}")

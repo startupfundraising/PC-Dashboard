@@ -40,8 +40,8 @@ After=network.target
 [Service]
 Type=simple
 User=alex
-WorkingDirectory=/home/alex/PC-Dashboard
-ExecStart=/usr/bin/python3 /home/alex/PC-Dashboard/dashboard_server.py
+WorkingDirectory=/home/alex/projects/active/PC-Dashboard
+ExecStart=/usr/bin/python3 /home/alex/projects/active/PC-Dashboard/dashboard_server.py
 Restart=always
 RestartSec=10
 
@@ -162,13 +162,13 @@ This dashboard includes a sophisticated protection system that prevents accident
 
 **Enable Testing Mode:**
 ```bash
-touch /home/alex/PC-Dashboard/.testing_mode
+touch /home/alex/projects/active/PC-Dashboard/.testing_mode
 # Scripts will now run in simulation mode
 ```
 
 **Disable Testing Mode:**
 ```bash
-rm /home/alex/PC-Dashboard/.testing_mode
+rm /home/alex/projects/active/PC-Dashboard/.testing_mode
 # Scripts will execute real operations (with approval)
 ```
 

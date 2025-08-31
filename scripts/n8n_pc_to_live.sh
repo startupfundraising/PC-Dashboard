@@ -5,10 +5,10 @@
 if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
     
     # Check if testing mode is active
-    if [ -f "/home/alex/PC-Dashboard/.testing_mode" ]; then
+    if [ -f "/home/alex/projects/active/PC-Dashboard/.testing_mode" ]; then
         echo "⚠️  TESTING MODE ACTIVE"
         echo "This script will not actually deploy to production."
-        echo "Remove /home/alex/PC-Dashboard/.testing_mode to enable real deployment"
+        echo "Remove /home/alex/projects/active/PC-Dashboard/.testing_mode to enable real deployment"
         echo ""
         echo "Running in TEST MODE (no actual changes will be made)..."
         echo ""

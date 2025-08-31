@@ -4,7 +4,7 @@ echo "🔒 Enabling TESTING MODE..."
 echo ""
 
 # Create testing mode file
-cat > /home/alex/PC-Dashboard/.testing_mode << 'EOF'
+cat > /home/alex/projects/active/PC-Dashboard/.testing_mode << 'EOF'
 TESTING MODE ACTIVE
 Remove this file to enable script execution
 Created for safety to prevent accidental production changes

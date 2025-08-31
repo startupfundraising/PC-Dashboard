@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/alex/PC-Dashboard
+cd /home/alex/projects/active/PC-Dashboard
 
 echo "Adding files to git..."
 git add .

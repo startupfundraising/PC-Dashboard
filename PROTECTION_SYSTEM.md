@@ -71,7 +71,7 @@ When Claude Code tries to run a dangerous script:
 ### Manual Execution
 To run a script manually in terminal:
 ```bash
-cd /home/alex/PC-Dashboard/scripts
+cd /home/alex/projects/active/PC-Dashboard/scripts
 ./n8n_pc_to_live.sh
 # Type "yes" when prompted
 ```
@@ -91,13 +91,13 @@ When clicking buttons in the web dashboard:
 ## Logging
 
 All script executions are logged to:
-- `/home/alex/PC-Dashboard/logs/script_executions.log`
+- `/home/alex/projects/active/PC-Dashboard/logs/script_executions.log`
 - System logger (viewable with `journalctl`)
 
 ## Troubleshooting
 
 ### Script Won't Run
-1. Check if testing mode is active: `ls -la /home/alex/PC-Dashboard/.testing_mode`
+1. Check if testing mode is active: `ls -la /home/alex/projects/active/PC-Dashboard/.testing_mode`
 2. Ensure you're in an interactive terminal
 3. Check you're not running through Claude Code
 

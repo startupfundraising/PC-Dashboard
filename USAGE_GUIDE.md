@@ -51,7 +51,7 @@ http://localhost:5000  # or port 8888
 - Green = running, Red = stopped
 
 #### View Logs
-- Dashboard logs: `/home/alex/PC-Dashboard/logs/`
+- Dashboard logs: `/home/alex/projects/active/PC-Dashboard/logs/`
 - Script execution logs: Check terminal output
 
 ## Working with Claude Code
@@ -60,7 +60,7 @@ http://localhost:5000  # or port 8888
 
 1. **Enable Testing Mode First**
 ```bash
-touch /home/alex/PC-Dashboard/.testing_mode
+touch /home/alex/projects/active/PC-Dashboard/.testing_mode
 ```
 
 2. **Let Claude Code Test**
@@ -72,7 +72,7 @@ touch /home/alex/PC-Dashboard/.testing_mode
 
 3. **Disable Testing Mode When Done**
 ```bash
-rm /home/alex/PC-Dashboard/.testing_mode
+rm /home/alex/projects/active/PC-Dashboard/.testing_mode
 ```
 
 ### Approval System
@@ -120,7 +120,7 @@ Do you approve this deployment? [Type your response]
 #### Full Protection (Recommended)
 ```bash
 # Enable testing mode
-touch /home/alex/PC-Dashboard/.testing_mode
+touch /home/alex/projects/active/PC-Dashboard/.testing_mode
 
 # Scripts require approval AND run in test mode
 ```
@@ -128,7 +128,7 @@ touch /home/alex/PC-Dashboard/.testing_mode
 #### Approval Only
 ```bash
 # Remove testing mode
-rm /home/alex/PC-Dashboard/.testing_mode
+rm /home/alex/projects/active/PC-Dashboard/.testing_mode
 
 # Scripts require approval but execute real operations
 ```
@@ -172,7 +172,7 @@ rm .testing_mode
 ### GitHub Backup
 ```bash
 # Manual backup to GitHub
-cd /home/alex/PC-Dashboard/scripts
+cd /home/alex/projects/active/PC-Dashboard/scripts
 ./pc_push_to_github.sh
 
 # Or use dashboard button
@@ -185,7 +185,7 @@ cd /home/alex/PC-Dashboard/scripts
 
 **Check Testing Mode:**
 ```bash
-ls -la /home/alex/PC-Dashboard/.testing_mode
+ls -la /home/alex/projects/active/PC-Dashboard/.testing_mode
 # If exists, scripts run in test mode only
 ```
 
@@ -227,12 +227,12 @@ lsof -i :5000  # or :8888
 
 **View Dashboard Logs:**
 ```bash
-tail -f /home/alex/PC-Dashboard/logs/dashboard.log
+tail -f /home/alex/projects/active/PC-Dashboard/logs/dashboard.log
 ```
 
 **View Script Execution Logs:**
 ```bash
-tail -f /home/alex/PC-Dashboard/logs/script_executions.log
+tail -f /home/alex/projects/active/PC-Dashboard/logs/script_executions.log
 ```
 
 **System Journal:**
@@ -266,9 +266,9 @@ journalctl -u pc-dashboard -f
 ## Quick Reference
 
 ### File Locations
-- Dashboard: `/home/alex/PC-Dashboard/`
-- Scripts: `/home/alex/PC-Dashboard/scripts/`
-- Logs: `/home/alex/PC-Dashboard/logs/`
+- Dashboard: `/home/alex/projects/active/PC-Dashboard/`
+- Scripts: `/home/alex/projects/active/PC-Dashboard/scripts/`
+- Logs: `/home/alex/projects/active/PC-Dashboard/logs/`
 - N8N Project: `/home/alex/projects/active/N8N/`
 
 ### Key Commands

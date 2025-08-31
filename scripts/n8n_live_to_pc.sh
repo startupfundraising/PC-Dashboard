@@ -5,10 +5,10 @@
 if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
     
     # Check if testing mode is active
-    if [ -f "/home/alex/PC-Dashboard/.testing_mode" ]; then
+    if [ -f "/home/alex/projects/active/PC-Dashboard/.testing_mode" ]; then
         echo "⚠️  TESTING MODE ACTIVE"
         echo "This script will simulate syncing but not make actual changes."
-        echo "Remove /home/alex/PC-Dashboard/.testing_mode to enable real sync"
+        echo "Remove /home/alex/projects/active/PC-Dashboard/.testing_mode to enable real sync"
         echo ""
         echo "Running in TEST MODE..."
         echo ""

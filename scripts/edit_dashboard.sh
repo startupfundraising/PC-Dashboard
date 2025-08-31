@@ -6,14 +6,14 @@ echo "Opening Claude Code with PC Dashboard context..."
 cat > /tmp/dashboard_context.md << 'EOF'
 # ⚠️ CRITICAL SAFETY WARNING ⚠️
 
-READ /home/alex/PC-Dashboard/CLAUDE_SAFETY.md FIRST!
+READ /home/alex/projects/active/PC-Dashboard/CLAUDE_SAFETY.md FIRST!
 
 NEVER execute the actual N8N scripts during debugging.
-ONLY use /home/alex/PC-Dashboard/safe_diagnose.sh for diagnostics.
+ONLY use /home/alex/projects/active/PC-Dashboard/safe_diagnose.sh for diagnostics.
 
 # PC Dashboard Context
 
-You are editing the PC Dashboard located at: /home/alex/PC-Dashboard/
+You are editing the PC Dashboard located at: /home/alex/projects/active/PC-Dashboard/
 
 ## Key Files:
 - index.html - Dashboard UI (buttons, layout, styling)
@@ -74,6 +74,6 @@ echo "Context file created. Opening Claude Code..."
 echo ""
 echo "PASTE THIS COMMAND IN A NEW TERMINAL:"
 echo ""
-echo "cat /tmp/dashboard_context.md && cd /home/alex/PC-Dashboard && echo 'Ready to edit dashboard. What changes would you like?'"
+echo "cat /tmp/dashboard_context.md && cd /home/alex/projects/active/PC-Dashboard && echo 'Ready to edit dashboard. What changes would you like?'"
 echo ""
 echo "Then tell Claude what you want to change!"

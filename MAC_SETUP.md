@@ -29,7 +29,7 @@ The dashboard uses Linux paths (`/home/alex/`). Update these for Mac:
 /Users/YOUR_USERNAME/projects/N8N
 
 # Change:
-/home/alex/PC-Dashboard
+/home/alex/projects/active/PC-Dashboard
 # To:
 /Users/YOUR_USERNAME/PC-Dashboard
 ```

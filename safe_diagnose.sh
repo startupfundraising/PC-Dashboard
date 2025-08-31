@@ -13,9 +13,9 @@ scripts=(
     "/home/alex/projects/active/N8N/scripts/pc_pull_from_github.sh"
     "/home/alex/projects/active/N8N/scripts/sync_live_to_git.sh"
     "/home/alex/projects/active/N8N/scripts/hetzner_pull_from_github.sh"
-    "/home/alex/PC-Dashboard/scripts/n8n_live_to_pc.sh"
-    "/home/alex/PC-Dashboard/scripts/n8n_pc_to_live.sh"
-    "/home/alex/PC-Dashboard/scripts/edit_dashboard.sh"
+    "/home/alex/projects/active/PC-Dashboard/scripts/n8n_live_to_pc.sh"
+    "/home/alex/projects/active/PC-Dashboard/scripts/n8n_pc_to_live.sh"
+    "/home/alex/projects/active/PC-Dashboard/scripts/edit_dashboard.sh"
 )
 
 for script in "${scripts[@]}"; do

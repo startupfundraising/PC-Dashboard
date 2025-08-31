@@ -4,7 +4,7 @@ echo "📦 Installing PC Dashboard as system service..."
 echo ""
 
 # Copy service file
-sudo cp /home/alex/PC-Dashboard/pc-dashboard.service /etc/systemd/system/
+sudo cp /home/alex/projects/active/PC-Dashboard/pc-dashboard.service /etc/systemd/system/
 
 # Reload systemd
 sudo systemctl daemon-reload

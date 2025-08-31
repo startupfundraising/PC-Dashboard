@@ -2,7 +2,7 @@
 
 echo "Setting up PC Dashboard GitHub repository..."
 
-cd /home/alex/PC-Dashboard
+cd /home/alex/projects/active/PC-Dashboard
 
 # Initialize git
 git init

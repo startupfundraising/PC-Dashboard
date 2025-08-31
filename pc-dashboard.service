@@ -5,12 +5,12 @@ After=network.target
 [Service]
 Type=simple
 User=alex
-WorkingDirectory=/home/alex/PC-Dashboard
-ExecStart=/usr/bin/python3 /home/alex/PC-Dashboard/dashboard_server.py
+WorkingDirectory=/home/alex/projects/active/PC-Dashboard
+ExecStart=/usr/bin/python3 /home/alex/projects/active/PC-Dashboard/dashboard_server.py
 Restart=always
 RestartSec=10
-StandardOutput=append:/home/alex/PC-Dashboard/logs/service.log
-StandardError=append:/home/alex/PC-Dashboard/logs/service-error.log
+StandardOutput=append:/home/alex/projects/active/PC-Dashboard/logs/service.log
+StandardError=append:/home/alex/projects/active/PC-Dashboard/logs/service-error.log
 
 [Install]
 WantedBy=multi-user.target

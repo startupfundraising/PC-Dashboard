@@ -13,7 +13,7 @@ echo ""
 echo "🔓 Disabling TESTING MODE..."
 
 # Remove testing mode file
-rm -f /home/alex/PC-Dashboard/.testing_mode
+rm -f /home/alex/projects/active/PC-Dashboard/.testing_mode
 
 echo "✅ Testing mode DISABLED"
 echo ""

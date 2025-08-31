@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /home/alex/PC-Dashboard
+cd /home/alex/projects/active/PC-Dashboard
 
 echo "Creating GitHub repository..."
 gh repo create PC-Dashboard --public --description "Web dashboard for running automation scripts with one click"
