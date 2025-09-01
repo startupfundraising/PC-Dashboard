@@ -59,6 +59,7 @@
 - Dashboard: `/Users/alexander/Mac-Dashboard/`
 - N8N Project: `/Users/alexander/projects/N8N/`
 - Memory Bank: `/Users/alexander/memory-bank/`
+- Claude Monitor: `/Users/alexander/Library/Python/3.9/bin/claude-monitor`
 - Service: `/Users/alexander/Library/LaunchAgents/com.mac-dashboard.plist`
 - Logs: `/Users/alexander/Mac-Dashboard/logs/`
 
@@ -126,7 +127,9 @@ launchctl load ~/Library/LaunchAgents/com.mac-dashboard.plist
 - ✅ Added Airtable MCP server
 - ✅ Added Context7 MCP server
 - ✅ Added Memory Bank MCP server
+- ✅ Added Claude Usage Monitor tool
 - ✅ All 11 MCP servers configured
+- ✅ Usage monitoring available via dashboard
 
 ### Dashboard Scripts
 - ✅ Fixed all non-interactive execution issues

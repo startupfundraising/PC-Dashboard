@@ -67,6 +67,10 @@ SCRIPT_MAPPINGS = {
     'edit-dashboard': {
         'cmd': 'bash /Users/alexander/Mac-Dashboard/scripts/edit_dashboard.sh',
         'description': 'Open Claude Code with dashboard context'
+    },
+    'claude-monitor': {
+        'cmd': 'bash /Users/alexander/Mac-Dashboard/scripts/claude_monitor.sh',
+        'description': 'Monitor Claude Code token usage in real-time'
     }
 }
 
