@@ -1,6 +1,6 @@
 # Mac Dashboard Setup Complete
 
-## Date: August 18, 2025
+## Date: Updated August 26, 2025
 
 ## What Was Done
 
@@ -10,6 +10,7 @@
 - Updated all paths from `/home/alex/` to `/Users/alexander/`
 - Changed all script references from `pc_*` to `mac_*`
 - Fixed button labels and onclick handlers
+- **FIXED**: Non-interactive script execution issues (no more red error indicators)
 
 ### 2. Protection System
 - **Testing Mode**: Currently ACTIVE at `~/Mac-Dashboard/.testing_mode`
@@ -28,22 +29,30 @@
 - `n8n_pc_to_live.sh` → `n8n_mac_to_live.sh`
 - All scripts updated with Mac paths
 - Protection checks functional
+- **FIXED**: All scripts now handle non-interactive mode properly
 
 ### 5. N8N Integration
 - Local N8N running in Docker at http://localhost:5678
-- 150 workflows loaded from production
+- 201+ workflows loaded from production
 - Database synced with encryption key
 - All sync scripts operational
+
+### 6. Claude Code Setup (Updated)
+- **Version**: 1.0.92 (latest)
+- **MCP Servers**: 10 configured (N8N, Supabase, PostgreSQL, Filesystem, Git, GitHub, Puppeteer, Google Analytics, Airtable, Context7)
+- Update guide available at `/Users/alexander/Mac-Dashboard/UPDATE_CLAUDE_CODE.md`
 
 ## Current Status
 
 ### ✅ Working
 - Dashboard server running
-- All buttons functional
+- All buttons functional (no red error indicators)
 - Protection system active
 - Testing mode enabled (safe)
 - Git repositories synced
 - Docker environment operational
+- Claude Code v1.0.92 with 10 MCP servers
+- All script fixes deployed
 
 ### 📁 Locations
 - Dashboard: `/Users/alexander/Mac-Dashboard/`
@@ -76,13 +85,16 @@ export SKIP_SAFETY_CHECK=true
 ## GitHub Updates Pushed
 
 ### PC-Dashboard Repository
-- Commit: `[MAC] Adapt dashboard for Mac environment`
+- Latest: `[MAC] Add Claude Code update guide`
 - All Mac-specific changes pushed
 - Scripts renamed and paths updated
+- Script execution fixes for dashboard
+- Claude Code update documentation
 
 ### N8N-Hetzner Repository  
-- Commit: `[MAC] Fix mac_pull_from_github.sh exit code issue`
+- Latest: `[MAC] Fix mac_push_to_github.sh for non-interactive mode`
 - Script fixes for proper error handling
+- All dashboard scripts fixed for non-interactive execution
 - Docker setup documentation added
 
 ## Quick Commands
@@ -105,11 +117,25 @@ launchctl unload ~/Library/LaunchAgents/com.mac-dashboard.plist
 launchctl load ~/Library/LaunchAgents/com.mac-dashboard.plist
 ```
 
+## Recent Updates (August 26, 2025)
+
+### Claude Code
+- ✅ Updated to v1.0.92 (latest)
+- ✅ Added Airtable MCP server
+- ✅ Added Context7 MCP server
+- ✅ All 10 MCP servers configured
+
+### Dashboard Scripts
+- ✅ Fixed all non-interactive execution issues
+- ✅ No more red error indicators in dashboard
+- ✅ All scripts handle terminal detection properly
+- ✅ Production deployment scripts maintain safety checks
+
 ## Next Steps
 
-1. Test all dashboard buttons with testing mode
+1. ✅ ~~Test all dashboard buttons with testing mode~~ - COMPLETED
 2. When ready, remove testing mode for production use
 3. Both Mac and PC now have equivalent setups
 4. Can sync work between machines via GitHub
 
-The Mac environment is fully configured and operational!
+The Mac environment is fully configured, updated, and operational!
