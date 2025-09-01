@@ -39,8 +39,9 @@
 
 ### 6. Claude Code Setup (Updated)
 - **Version**: 1.0.92 (latest)
-- **MCP Servers**: 10 configured (N8N, Supabase, PostgreSQL, Filesystem, Git, GitHub, Puppeteer, Google Analytics, Airtable, Context7)
+- **MCP Servers**: 11 configured (N8N, Supabase, PostgreSQL, Filesystem, Git, GitHub, Puppeteer, Google Analytics, Airtable, Context7, Memory Bank)
 - Update guide available at `/Users/alexander/Mac-Dashboard/UPDATE_CLAUDE_CODE.md`
+- Memory Bank MCP guide at `/Users/alexander/Mac-Dashboard/MEMORY_BANK_MCP.md`
 
 ## Current Status
 
@@ -51,12 +52,13 @@
 - Testing mode enabled (safe)
 - Git repositories synced
 - Docker environment operational
-- Claude Code v1.0.92 with 10 MCP servers
+- Claude Code v1.0.92 with 11 MCP servers
 - All script fixes deployed
 
 ### 📁 Locations
 - Dashboard: `/Users/alexander/Mac-Dashboard/`
 - N8N Project: `/Users/alexander/projects/N8N/`
+- Memory Bank: `/Users/alexander/memory-bank/`
 - Service: `/Users/alexander/Library/LaunchAgents/com.mac-dashboard.plist`
 - Logs: `/Users/alexander/Mac-Dashboard/logs/`
 
@@ -123,7 +125,8 @@ launchctl load ~/Library/LaunchAgents/com.mac-dashboard.plist
 - ✅ Updated to v1.0.92 (latest)
 - ✅ Added Airtable MCP server
 - ✅ Added Context7 MCP server
-- ✅ All 10 MCP servers configured
+- ✅ Added Memory Bank MCP server
+- ✅ All 11 MCP servers configured
 
 ### Dashboard Scripts
 - ✅ Fixed all non-interactive execution issues

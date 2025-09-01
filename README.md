@@ -1,6 +1,8 @@
-# PC Dashboard
+# Mac Dashboard
 
 A web-based dashboard for running automation scripts with a single click. Perfect for managing N8N workflows, Git repositories, and system maintenance tasks.
+
+**Note**: This is the Mac adaptation of the original PC Dashboard, with all paths and commands updated for macOS.
 
 ## Features
 
