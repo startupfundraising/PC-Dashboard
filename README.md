@@ -119,21 +119,21 @@ PC-Dashboard/
 ## Available Scripts
 
 ### N8N Management
-- **Status** - Check Docker container status
-- **Start/Stop/Restart** - Control N8N services
-- **Sync from Production** - Pull latest workflows
-- **Backup** - Save to Dropbox
+- **Mac to GitHub** - Push Mac N8N workflows to GitHub
+- **GitHub to Mac** - Pull N8N workflows from GitHub to Mac
+- **Live to GitHub** - Push production N8N workflows to GitHub
+- **GitHub to Live** - Deploy workflows from GitHub to production
+- **Live to Mac** - Pull from production to Mac via GitHub
+- **Mac to Live** - Deploy Mac to production via GitHub
 
-### Git Operations
-- **Status All** - Check all repositories
-- **Pull All** - Update all repos
-- **Push All** - Push pending changes
-- **Quick Commit** - Auto-commit with timestamp
+### Admin Tools
+- **Edit Dashboard** - Open Claude Code with dashboard context
+- **Claude Monitor** - Real-time token usage monitoring for Claude AI
 
-### System Management
-- **System Health** - CPU, memory, disk usage
-- **Docker Cleanup** - Remove unused containers/images
-- **Disk Usage** - Check storage space
+### Claude Code Integration
+- **11 MCP Servers** - N8N, Supabase, PostgreSQL, Filesystem, Git, GitHub, Puppeteer, Google Analytics, Airtable, Context7, Memory Bank
+- **Usage Monitoring** - Track token consumption and costs
+- **Memory Bank** - Persistent project context storage
 
 ## Security & Protection System
 
