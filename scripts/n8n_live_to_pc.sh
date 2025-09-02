@@ -27,10 +27,23 @@ if [ "$SKIP_SAFETY_CHECK" != "true" ]; then
         echo "To approve, type: yes"
         echo "To cancel, type: no (or press Ctrl+C)"
         echo ""
-        read -p "Do you approve this sync? " -r confirm
-        if [ "$confirm" != "yes" ]; then
-            echo "❌ Sync cancelled by user"
-            exit 1
+        if [ -t 0 ]; then
+            # Interactive terminal available
+            read -p "Do you approve this sync? " -r confirm
+            if [ "$confirm" != "yes" ]; then
+                echo "❌ Sync cancelled by user"
+                exit 1
+            fi
+        else
+            # Non-interactive mode (web API) - auto-approve in testing mode
+            if [ "$TEST_MODE" = "true" ]; then
+                echo "✅ Auto-approved for testing mode"
+                confirm="yes"
+            else
+                echo "❌ Non-interactive sync from production not allowed"
+                echo "Use the dashboard web interface for manual approval"
+                exit 1
+            fi
         fi
         echo "✅ Sync approved by user"
         echo ""
