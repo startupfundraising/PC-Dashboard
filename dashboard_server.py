@@ -67,6 +67,14 @@ SCRIPT_MAPPINGS = {
     'edit-dashboard': {
         'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/edit_dashboard.sh',
         'description': 'Open Claude Code with dashboard context'
+    },
+    'launch-claude-code': {
+        'cmd': '/mnt/c/Windows/System32/cmd.exe /c "start wsl -d U2 bash -c \\"cd ~ && claude\\""',
+        'description': 'Launch Claude Code in new terminal window'
+    },
+    'open-local': {
+        'cmd': 'DISPLAY=:0 /opt/Local/Local',
+        'description': 'Open Local WordPress program'
     }
 }
 
