@@ -1,19 +1,22 @@
 #!/bin/bash
 
-echo "Opening Claude Code with PC Dashboard context..."
+# Load environment and common functions
+source "$(dirname "$0")/lib/common.sh"
+
+echo "Opening Claude Code with $PLATFORM Dashboard context..."
 
 # Create a context file with all the important information
-cat > /tmp/dashboard_context.md << 'EOF'
+cat > /tmp/dashboard_context.md << EOF
 # ⚠️ CRITICAL SAFETY WARNING ⚠️
 
-READ /home/alex/projects/active/PC-Dashboard/CLAUDE_SAFETY.md FIRST!
+READ $DASHBOARD_PATH/CLAUDE_SAFETY.md FIRST!
 
 NEVER execute the actual N8N scripts during debugging.
-ONLY use /home/alex/projects/active/PC-Dashboard/safe_diagnose.sh for diagnostics.
+ONLY use $DASHBOARD_PATH/safe_diagnose.sh for diagnostics.
 
-# PC Dashboard Context
+# $PLATFORM Dashboard Context
 
-You are editing the PC Dashboard located at: /home/alex/projects/active/PC-Dashboard/
+You are editing the $PLATFORM Dashboard located at: $DASHBOARD_PATH/
 
 ## Key Files:
 - index.html - Dashboard UI (buttons, layout, styling)
@@ -22,13 +25,13 @@ You are editing the PC Dashboard located at: /home/alex/projects/active/PC-Dashb
 ## Current Button Structure:
 
 ### Dashboard Tab
-- N8N: PC to Github, GitHub to PC
+- N8N: $PLATFORM to Github, GitHub to $PLATFORM
 - Admin: Edit Dashboard
 
 ### N8N Tab
-Daily: PC to Github, GitHub to PC
+Daily: $PLATFORM to Github, GitHub to $PLATFORM
 Github: Live to GitHub, GitHub to live
-Caution: Live to PC, PC to live
+Caution: Live to $PLATFORM, $PLATFORM to live
 
 ### GitHub Tab
 Same as N8N tab structure
@@ -36,28 +39,28 @@ Same as N8N tab structure
 ### How to Add/Edit Buttons:
 
 1. To add a button in index.html:
-```html
+\`\`\`html
 <button class="script-btn" onclick="runScript('script-name')" data-tooltip="Description">
     <span class="icon">📦</span>
     <span>Button Text</span>
 </button>
-```
+\`\`\`
 
 2. To add script mapping in dashboard_server.py:
-```python
+\`\`\`python
 'script-name': {
     'cmd': 'bash command here',
     'description': 'What it does'
 }
-```
+\`\`\`
 
 ## N8N Script Paths:
-- Live to GitHub: /home/alex/projects/active/N8N/scripts/sync_live_to_git.sh
-- GitHub to Live: /home/alex/projects/active/N8N/scripts/hetzner_pull_from_github.sh
-- PC to GitHub: /home/alex/projects/active/N8N/scripts/pc_push_to_github.sh
-- GitHub to PC: /home/alex/projects/active/N8N/scripts/pc_pull_from_github.sh
-- Live to PC: Creates new script that runs sync_live_to_git.sh then pc_pull_from_github.sh
-- PC to Live: Creates new script that runs pc_push_to_github.sh then hetzner_pull_from_github.sh
+- Live to GitHub: $N8N_PATH/scripts/sync_live_to_git.sh
+- GitHub to Live: $N8N_PATH/scripts/hetzner_pull_from_github.sh
+- $PLATFORM to GitHub: $N8N_PATH/scripts/${PLATFORM}_push_to_github.sh
+- GitHub to $PLATFORM: $N8N_PATH/scripts/${PLATFORM}_pull_from_github.sh
+- Live to $PLATFORM: Creates new script that runs sync_live_to_git.sh then ${PLATFORM}_pull_from_github.sh
+- $PLATFORM to Live: Creates new script that runs ${PLATFORM}_push_to_github.sh then hetzner_pull_from_github.sh
 
 ## Design Guidelines:
 - Card sections with #0f3460 background
@@ -74,6 +77,6 @@ echo "Context file created. Opening Claude Code..."
 echo ""
 echo "PASTE THIS COMMAND IN A NEW TERMINAL:"
 echo ""
-echo "cat /tmp/dashboard_context.md && cd /home/alex/projects/active/PC-Dashboard && echo 'Ready to edit dashboard. What changes would you like?'"
+echo "cat /tmp/dashboard_context.md && cd $DASHBOARD_PATH && echo 'Ready to edit dashboard. What changes would you like?'"
 echo ""
 echo "Then tell Claude what you want to change!"

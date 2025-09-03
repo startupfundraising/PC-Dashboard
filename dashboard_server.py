@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-PC Dashboard Server
+Cross-Platform Dashboard Server
 Handles script execution and provides API endpoints for the dashboard
+Auto-detects environment and loads appropriate configuration
 """
 
 import os
@@ -13,70 +14,21 @@ from urllib.parse import urlparse
 from datetime import datetime
 import traceback
 
-# Configuration
-PORT = 8888
-HOST = 'localhost'
-LOG_FILE = '/home/alex/projects/active/PC-Dashboard/logs/dashboard.log'
+# Import configuration system
+from config import config
 
-# Ensure log directory exists
-os.makedirs(os.path.dirname(LOG_FILE), exist_ok=True)
-
-# Setup logging
+# Setup logging using configuration
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     handlers=[
-        logging.FileHandler(LOG_FILE),
+        logging.FileHandler(config.get_log_file()),
         logging.StreamHandler()
     ]
 )
 
-# Script mappings - linking to existing project scripts
-SCRIPT_MAPPINGS = {
-    # N8N Scripts - Daily Operations
-    'n8n-pc-to-github': {
-        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/pc_push_to_github.sh',
-        'description': 'Push local N8N workflows to GitHub'
-    },
-    'n8n-github-to-pc': {
-        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/pc_pull_from_github.sh',
-        'description': 'Pull N8N workflows from GitHub to local'
-    },
-    
-    # N8N Scripts - GitHub Sync
-    'n8n-live-to-github': {
-        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/sync_live_to_git.sh',
-        'description': 'Push production N8N workflows to GitHub'
-    },
-    'n8n-github-to-live': {
-        'cmd': 'cd /home/alex/projects/active/N8N && bash scripts/hetzner_pull_from_github.sh',
-        'description': 'Deploy workflows from GitHub to production'
-    },
-    
-    # N8N Scripts - Caution (Full sync operations)
-    'n8n-live-to-pc': {
-        'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/n8n_live_to_pc.sh',
-        'description': 'Pull from production to local via GitHub'
-    },
-    'n8n-pc-to-live': {
-        'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/n8n_pc_to_live.sh',
-        'description': 'Deploy local to production via GitHub'
-    },
-    
-    # Admin Scripts
-    'edit-dashboard': {
-        'cmd': 'bash /home/alex/projects/active/PC-Dashboard/scripts/edit_dashboard.sh',
-        'description': 'Open Claude Code with dashboard context'
-    },
-    'launch-claude-code': {
-        'cmd': '/mnt/c/Windows/System32/cmd.exe /c "start wsl -d U2 bash -c \\"cd ~ && claude\\""',
-        'description': 'Launch Claude Code in new terminal window'
-    },
-    'open-local': {
-        'cmd': 'DISPLAY=:0 /opt/Local/Local',
-        'description': 'Open Local WordPress program'
-    }
-}
+# Get platform-aware script mappings from configuration
+SCRIPT_MAPPINGS = config.get_script_mappings()
 
 class DashboardHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -96,7 +48,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/plain')
             self.end_headers()
             try:
-                with open(LOG_FILE, 'r') as f:
+                with open(config.get_log_file(), 'r') as f:
                     # Get last 100 lines
                     lines = f.readlines()
                     self.wfile.write(''.join(lines[-100:]).encode())
@@ -120,14 +72,14 @@ class DashboardHandler(BaseHTTPRequestHandler):
             self.send_header('Content-Type', 'text/html')
             self.end_headers()
             try:
-                with open('/home/alex/projects/active/PC-Dashboard/index.html', 'r') as f:
+                with open(config.get_index_file(), 'r') as f:
                     self.wfile.write(f.read().encode())
             except:
                 self.wfile.write(b'<h1>Error loading dashboard</h1>')
         else:
             self.send_header('Content-Type', 'text/plain')
             self.end_headers()
-            self.wfile.write(b'PC Dashboard Server Running')
+            self.wfile.write(f'{config.platform.title()} Dashboard Server Running'.encode())
     
     def do_OPTIONS(self):
         """Handle OPTIONS requests for CORS"""
@@ -160,7 +112,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         is_dangerous = any(pattern in script_name.lower() for pattern in dangerous_patterns)
         
         # Check testing mode (only log for dangerous scripts)
-        if os.path.exists('/home/alex/projects/active/PC-Dashboard/.testing_mode') and is_dangerous:
+        if config.is_testing_mode() and is_dangerous:
             logging.info(f"ℹ️ Testing mode active - dangerous script {script_name} will run in test mode")
         
         # Block automation attempts on dangerous scripts (unless from browser)
@@ -183,7 +135,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
                 parts = cmd.split('&&')
                 if len(parts) > 1:
                     script_path = parts[1].strip()
-                    full_path = f"/home/alex/projects/active/PC-Dashboard/scripts/{script_path.split('/')[-1]}"
+                    full_path = f"{config.scripts_path}/{script_path.split('/')[-1]}"
                     
                     # Create script if it doesn't exist
                     if not os.path.exists(full_path):
@@ -236,21 +188,27 @@ class DashboardHandler(BaseHTTPRequestHandler):
         
         # Default script content based on name
         if 'backup' in script_name:
-            content = '''#!/bin/bash
+            content = f'''#!/bin/bash
+# Load environment and common functions
+source "$(dirname "$0")/lib/common.sh"
+
 echo "Starting backup..."
 echo "Backing up projects to Dropbox..."
 
 # Add your backup logic here
-# Example: tar -czf backup.tar.gz /home/alex/projects/active/
+# Example: tar -czf backup.tar.gz $BASE_PATH/projects/
 
 echo "Backup complete!"
 '''
         elif 'sync' in script_name:
-            content = '''#!/bin/bash
+            content = f'''#!/bin/bash
+# Load environment and common functions
+source "$(dirname "$0")/lib/common.sh"
+
 echo "Starting sync..."
 
 # Pull all git repos
-for dir in /home/alex/projects/active/*/; do
+for dir in $BASE_PATH/projects/*/; do
     if [ -d "$dir/.git" ]; then
         echo "Syncing $(basename "$dir")..."
         cd "$dir" && git pull
@@ -261,6 +219,9 @@ echo "Sync complete!"
 '''
         else:
             content = f'''#!/bin/bash
+# Load environment and common functions
+source "$(dirname "$0")/lib/common.sh"
+
 echo "Running {script_name}..."
 # Add your script logic here
 echo "Complete!"
@@ -279,12 +240,14 @@ echo "Complete!"
 def main():
     """Start the dashboard server"""
     try:
-        # Create scripts directory if it doesn't exist
-        os.makedirs('/home/alex/projects/active/PC-Dashboard/scripts', exist_ok=True)
+        # Print configuration info
+        print(f"\n🚀 {config.platform.title()} Dashboard Server")
+        print(f"📋 Configuration: {config}")
+        print(f"🧪 Testing Mode: {'ACTIVE' if config.is_testing_mode() else 'INACTIVE'}")
         
-        server = HTTPServer((HOST, PORT), DashboardHandler)
-        logging.info(f"Dashboard server starting on {HOST}:{PORT}")
-        print(f"\n🚀 PC Dashboard Server running on http://{HOST}:{PORT}")
+        server = HTTPServer((config.host, config.port), DashboardHandler)
+        logging.info(f"Dashboard server starting on {config.host}:{config.port}")
+        print(f"\n🌐 Server running on http://{config.host}:{config.port}")
         print("📋 Open index.html in your browser to access the dashboard")
         print("Press Ctrl+C to stop\n")
         
@@ -296,6 +259,7 @@ def main():
     except Exception as e:
         logging.error(f"Server error: {str(e)}")
         print(f"❌ Error: {str(e)}")
+        print(f"💡 Tip: Check if .env file exists and is properly configured")
 
 if __name__ == '__main__':
     main()
