@@ -168,6 +168,10 @@ OPEN_LOCAL_CMD=DISPLAY=:0 /opt/Local/Local
             'open-local': {
                 'cmd': self.open_local_cmd,
                 'description': 'Open Local WordPress program'
+            },
+            'claude-monitor': {
+                'cmd': f'bash {self.scripts_path}/claude_monitor.sh',
+                'description': 'Start Claude Code usage monitor'
             }
         }
     
