@@ -90,7 +90,7 @@ HOST=localhost
 PORT=8888
 
 # Platform-specific commands
-LAUNCH_CLAUDE_CMD=/mnt/c/Windows/System32/cmd.exe /c "start wsl -d U2 bash -c \\"cd ~ && claude\\""
+LAUNCH_CLAUDE_CMD=/mnt/c/Windows/System32/cmd.exe /c "start \"Claude Code\" wsl -d U2 bash -c \\"cd ~ && claude\\""
 OPEN_LOCAL_CMD=DISPLAY=:0 /opt/Local/Local
 '''
         
@@ -106,22 +106,65 @@ OPEN_LOCAL_CMD=DISPLAY=:0 /opt/Local/Local
         self.n8n_path = os.getenv('N8N_PATH', f'{self.base_path}/N8N')
         self.log_path = os.getenv('LOG_PATH', f'{self.dashboard_path}/logs')
         self.scripts_path = os.getenv('SCRIPTS_PATH', f'{self.dashboard_path}/scripts')
-        
+
         # Web server settings
         self.host = os.getenv('HOST', 'localhost')
-        self.port = int(os.getenv('PORT', '8888'))
-        
+        try:
+            self.port = int(os.getenv('PORT', '8888'))
+        except ValueError:
+            print(f"⚠️  Invalid PORT value: {os.getenv('PORT')}. Using default 8888")
+            self.port = 8888
+
         # Platform-specific commands
         self.launch_claude_cmd = os.getenv('LAUNCH_CLAUDE_CMD', 'claude')
         self.open_local_cmd = os.getenv('OPEN_LOCAL_CMD', 'echo "Local not configured"')
-        
+
+        # Validate configuration
+        self._validate_config()
+
         # Ensure directories exist
         self._ensure_directories()
     
+    def _validate_config(self):
+        """Validate configuration values"""
+        errors = []
+        warnings = []
+
+        # Check if critical paths exist
+        if not os.path.exists(self.base_path):
+            errors.append(f"Base path does not exist: {self.base_path}")
+
+        # Check port range
+        if not (1024 <= self.port <= 65535):
+            warnings.append(f"Port {self.port} is outside recommended range (1024-65535)")
+
+        # Check if commands look valid (basic sanity check)
+        if 'claude' not in self.launch_claude_cmd.lower():
+            warnings.append("LAUNCH_CLAUDE_CMD doesn't seem to contain 'claude'")
+
+        # Print warnings
+        for warning in warnings:
+            print(f"⚠️  Configuration warning: {warning}")
+
+        # Exit on errors
+        if errors:
+            print("❌ Configuration errors:")
+            for error in errors:
+                print(f"   {error}")
+            print("Please fix these errors before continuing.")
+            sys.exit(1)
+
     def _ensure_directories(self):
         """Create necessary directories"""
         for path in [self.log_path, self.scripts_path]:
-            Path(path).mkdir(parents=True, exist_ok=True)
+            try:
+                Path(path).mkdir(parents=True, exist_ok=True)
+                print(f"✅ Ensured directory exists: {path}")
+            except PermissionError:
+                print(f"❌ Permission denied creating directory: {path}")
+                print("Please run with appropriate permissions or create manually.")
+            except Exception as e:
+                print(f"❌ Error creating directory {path}: {e}")
     
     def get_script_mappings(self):
         """Return platform-aware script mappings"""

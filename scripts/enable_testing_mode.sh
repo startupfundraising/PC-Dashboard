@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# Load environment and common functions
+source "$(dirname "$0")/lib/common.sh"
+
 echo "🔒 Enabling TESTING MODE..."
 echo ""
 
 # Create testing mode file
-cat > /home/alex/PC-Dashboard/.testing_mode << 'EOF'
+cat > $DASHBOARD_PATH/.testing_mode << 'EOF'
 TESTING MODE ACTIVE
 Remove this file to enable script execution
 Created for safety to prevent accidental production changes

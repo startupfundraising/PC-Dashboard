@@ -9,10 +9,13 @@ import os
 import subprocess
 import json
 import logging
+import re
+import shlex
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 from datetime import datetime
 import traceback
+from pathlib import Path
 
 # Import configuration system
 from config import config
@@ -37,7 +40,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
         
         # CORS headers
         self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8888')
         
         if path == '/status':
             self.send_header('Content-Type', 'application/json')
@@ -59,7 +62,15 @@ class DashboardHandler(BaseHTTPRequestHandler):
             script_name = path[5:]  # Remove '/run/' prefix
             self.send_header('Content-Type', 'application/json')
             self.end_headers()
-            
+
+            # Validate script name
+            if not self.is_valid_script_name(script_name):
+                self.wfile.write(json.dumps({
+                    'success': False,
+                    'error': f'Invalid script name: {script_name}'
+                }).encode())
+                return
+
             if script_name in SCRIPT_MAPPINGS:
                 result = self.run_script(script_name)
                 self.wfile.write(json.dumps(result).encode())
@@ -84,7 +95,7 @@ class DashboardHandler(BaseHTTPRequestHandler):
     def do_OPTIONS(self):
         """Handle OPTIONS requests for CORS"""
         self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Origin', 'http://localhost:8888')
         self.send_header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
         self.send_header('Access-Control-Allow-Headers', 'Content-Type')
         self.end_headers()
@@ -126,8 +137,17 @@ class DashboardHandler(BaseHTTPRequestHandler):
                     'message': 'For safety, this script cannot be run via automation'
                 }
         
+        # Final security check on command
+        if not self.is_safe_command(cmd):
+            logging.warning(f"⛔ BLOCKED: Unsafe command detected in {script_name}: {cmd}")
+            return {
+                'success': False,
+                'error': 'BLOCKED: Command contains unsafe patterns',
+                'message': 'This command was blocked for security reasons'
+            }
+
         logging.info(f"Running script: {script_name}")
-        
+
         try:
             # Check if it's a script file that needs to exist
             if cmd.startswith('cd') and './scripts/' in cmd:
@@ -141,14 +161,32 @@ class DashboardHandler(BaseHTTPRequestHandler):
                     if not os.path.exists(full_path):
                         self.create_default_script(full_path, script_name)
             
-            # Run the command
-            result = subprocess.run(
-                cmd,
-                shell=True,
-                capture_output=True,
-                text=True,
-                timeout=60
-            )
+            # Run the command with enhanced security
+            # Use shell=False when possible for better security
+            if self.can_use_shell_false(cmd):
+                # Parse command safely
+                cmd_parts = shlex.split(cmd)
+                result = subprocess.run(
+                    cmd_parts,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                    cwd=config.dashboard_path
+                )
+            else:
+                # Fall back to shell=True but with restricted environment
+                restricted_env = os.environ.copy()
+                restricted_env['PATH'] = '/usr/local/bin:/usr/bin:/bin'
+
+                result = subprocess.run(
+                    cmd,
+                    shell=True,
+                    capture_output=True,
+                    text=True,
+                    timeout=60,
+                    env=restricted_env,
+                    cwd=config.dashboard_path
+                )
             
             output = result.stdout if result.stdout else ""
             if result.stderr:
@@ -233,6 +271,46 @@ echo "Complete!"
         os.chmod(path, 0o755)
         logging.info(f"Created default script: {path}")
     
+    def is_valid_script_name(self, script_name):
+        """Validate script name to prevent injection attacks"""
+        # Only allow alphanumeric, hyphens, and underscores
+        if not re.match(r'^[a-zA-Z0-9_-]+$', script_name):
+            return False
+
+        # Prevent directory traversal
+        if '..' in script_name or '/' in script_name or '\\' in script_name:
+            return False
+
+        return True
+
+    def is_safe_command(self, cmd):
+        """Check if command is safe to execute"""
+        # Block dangerous patterns
+        dangerous_patterns = [
+            r'\|\s*rm\s',  # Pipe to rm command
+            r'\|\s*dd\s',  # Pipe to dd command
+            r'\>\s*/dev/',  # Redirect to device files
+            r'sudo\s+(?!systemctl)',  # Sudo except for systemctl
+            r'\$\(.*\)',  # Command substitution
+            r'`.*`',  # Backtick command substitution
+            r'\;\s*(rm|dd|mkfs|format)',  # Chained dangerous commands
+        ]
+
+        for pattern in dangerous_patterns:
+            if re.search(pattern, cmd, re.IGNORECASE):
+                return False
+
+        return True
+
+    def can_use_shell_false(self, cmd):
+        """Check if we can safely use shell=False for this command"""
+        # If command contains shell operators, we need shell=True
+        shell_operators = ['&&', '||', '|', '>', '<', ';', '&']
+        for op in shell_operators:
+            if op in cmd:
+                return False
+        return True
+
     def log_message(self, format, *args):
         """Override to suppress default logging"""
         return

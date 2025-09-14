@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Load environment and common functions
+source "$(dirname "$0")/lib/common.sh"
+
 echo "⚠️  WARNING: Disabling testing mode will allow scripts to execute!"
 echo ""
 read -p "Are you SURE you want to enable script execution? (yes/no): " confirm
@@ -13,7 +16,7 @@ echo ""
 echo "🔓 Disabling TESTING MODE..."
 
 # Remove testing mode file
-rm -f /home/alex/PC-Dashboard/.testing_mode
+rm -f $DASHBOARD_PATH/.testing_mode
 
 echo "✅ Testing mode DISABLED"
 echo ""

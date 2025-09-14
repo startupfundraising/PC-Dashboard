@@ -1,0 +1,13 @@
+# PC Dashboard Python Dependencies
+# Install with: pip3 install -r requirements.txt
+
+# Core HTTP server and environment management
+python-dotenv>=1.0.0
+
+# Optional but recommended for enhanced logging
+colorama>=0.4.4
+
+# Development and testing dependencies (optional)
+# pytest>=7.0.0
+# black>=22.0.0
+# flake8>=5.0.0

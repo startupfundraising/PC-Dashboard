@@ -1,10 +1,10 @@
 #!/bin/bash
-# PC Push to GitHub: Push N8N workflows from PC to GitHub
+# PC Pull from GitHub: Pull N8N workflows from GitHub to local PC
 
 # Load environment and common functions
 source "$(dirname "$0")/lib/common.sh"
 
-echo "📤 Pushing N8N workflows from PC to GitHub..."
+echo "📥 Pulling N8N workflows from GitHub to PC..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 
 # Navigate to N8N directory
@@ -20,15 +20,15 @@ if [ ! -d ".git" ]; then
     exit 1
 fi
 
-# Execute the actual push command
-safe_execute "bash scripts/pc_push_to_github.sh" "Push N8N workflows from PC to GitHub"
+# Execute the actual pull command
+safe_execute "bash scripts/pc_pull_from_github.sh" "Pull N8N workflows from GitHub to PC"
 
 exit_code=$?
 
 if [ $exit_code -eq 0 ]; then
-    echo "✅ Successfully pushed workflows from PC to GitHub"
+    echo "✅ Successfully pulled workflows from GitHub to PC"
 else
-    echo "❌ Failed to push workflows to GitHub"
+    echo "❌ Failed to pull workflows from GitHub"
 fi
 
 cleanup_script $exit_code
